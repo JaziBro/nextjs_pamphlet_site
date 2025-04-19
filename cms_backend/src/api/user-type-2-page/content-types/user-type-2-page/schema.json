@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_type_2_pages",
+  "info": {
+    "singularName": "user-type-2-page",
+    "pluralName": "user-type-2-pages",
+    "displayName": "user_type_2_page ",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "cta_button_text": {
+      "type": "string"
+    },
+    "cta_link": {
+      "type": "string"
+    },
+    "sections": {
+      "displayName": "sections",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.sections"
+    }
+  }
+}

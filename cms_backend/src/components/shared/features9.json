@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_features9s",
+  "info": {
+    "displayName": "features9",
+    "icon": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    }
+  }
+}

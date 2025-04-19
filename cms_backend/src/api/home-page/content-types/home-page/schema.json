@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "home_page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "hero_title": {
+      "type": "string"
+    },
+    "hero_subtitle": {
+      "type": "string"
+    },
+    "hero_image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "features": {
+      "displayName": "FeatureItem ",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.feature-item"
+    },
+    "testimonial_section": {
+      "displayName": "Testimonial",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.testimonial"
+    }
+  }
+}

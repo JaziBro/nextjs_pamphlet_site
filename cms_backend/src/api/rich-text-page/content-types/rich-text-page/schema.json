@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rich_text_pages",
+  "info": {
+    "singularName": "rich-text-page",
+    "pluralName": "rich-text-pages",
+    "displayName": "rich_text_page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "slug": {
+      "type": "uid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "blocks"
+    }
+  }
+}

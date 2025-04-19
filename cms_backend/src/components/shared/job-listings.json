@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_shared_job_listings",
+  "info": {
+    "displayName": "job_listings",
+    "icon": "briefcase",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "type": "string"
+    },
+    "apply_link": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  }
+}

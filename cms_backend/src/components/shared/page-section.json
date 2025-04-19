@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_page_sections",
+  "info": {
+    "displayName": "PageSection",
+    "icon": "alien",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "body": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "page_title": {
+      "type": "string"
+    }
+  }
+}

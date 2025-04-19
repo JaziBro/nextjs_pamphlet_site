@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "career_pages",
+  "info": {
+    "singularName": "career-page",
+    "pluralName": "career-pages",
+    "displayName": "career_page",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "intro_text": {
+      "type": "string"
+    },
+    "job_listings": {
+      "displayName": "job_listings",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.job-listings"
+    },
+    "footer_links": {
+      "displayName": "footer-links",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.footer-links"
+    }
+  }
+}

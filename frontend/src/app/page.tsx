@@ -1,3 +1,4 @@
+import Hero from "./components/Hero";
 import NavBar from "./components/NavBar";
 
 // async function getHomePageData() {
@@ -14,7 +15,7 @@ export default async function HomePage() {
   return (
     <div>
       <NavBar/>
-      <h1>ASDFGHJKL;LJHFEWDFGHJ</h1>
+      <Hero/>
     </div>
   );
 }

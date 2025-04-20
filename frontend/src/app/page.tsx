@@ -21,7 +21,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      <NavBar/>
       <Hero/>
       <Features/>
       <Team/>

@@ -30,9 +30,6 @@ export default function LastSection() {
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-80"></div>
         </div>
       </div>
-
-      {/* Blue divider line */}
-      <div className="mt-16 border-t border-blue-500"></div>
     </section>
   )
 }

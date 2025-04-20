@@ -3,6 +3,7 @@ import Hero from "./components/Hero";
 import NavBar from "./components/NavBar";
 import ProductShowcase from "./components/ProductShowcase";
 import Section from "./components/Section";
+import Services from "./components/Services";
 import Team from "./components/Team";
 
 // async function getHomePageData() {
@@ -24,6 +25,7 @@ export default async function HomePage() {
       <Team/>
       <Section/>
       <ProductShowcase/>
+      <Services/>
     </div>
   );
 }

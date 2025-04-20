@@ -6,6 +6,7 @@
 // }
 
 import Features from "../components/Features";
+import Banner from "./components/Banner";
 import Hero from "./components/Hero";
 
 export default async function User1Page() {
@@ -17,6 +18,7 @@ export default async function User1Page() {
     <div>
         <Hero/>
         <Features/>
+        <Banner/>
     </div>
   );
 }

@@ -1,5 +1,8 @@
+import Features from "./components/Features";
 import Hero from "./components/Hero";
 import NavBar from "./components/NavBar";
+import Section from "./components/Section";
+import Team from "./components/Team";
 
 // async function getHomePageData() {
 //   const res = await fetch("http://localhost:1337/api/home-pages");
@@ -16,6 +19,9 @@ export default async function HomePage() {
     <div>
       <NavBar/>
       <Hero/>
+      <Features/>
+      <Team/>
+      <Section/>
     </div>
   );
 }

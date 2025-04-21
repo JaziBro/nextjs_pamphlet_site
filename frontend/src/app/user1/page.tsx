@@ -10,6 +10,7 @@ import Banner from "./components/Banner";
 import Hero from "./components/Hero";
 import Section from "./components/Section";
 import Banner2 from "./components/Banner2";
+import Services from "./components/Services";
 
 export default async function User1Page() {
   // const data = await getHomePageData();
@@ -23,6 +24,7 @@ export default async function User1Page() {
         <Banner/>
         <Section/>
         <Banner2/> 
+        <Services/>
     </div>
   );
 }

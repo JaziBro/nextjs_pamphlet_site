@@ -5,9 +5,11 @@
 //   return data.data?.[0];
 // }
 
-import Features from "../components/Features";
+import Features from "./components/Features";
 import Banner from "./components/Banner";
 import Hero from "./components/Hero";
+import Section from "./components/Section";
+import Banner2 from "./components/Banner2";
 
 export default async function User1Page() {
   // const data = await getHomePageData();
@@ -19,6 +21,8 @@ export default async function User1Page() {
         <Hero/>
         <Features/>
         <Banner/>
+        <Section/>
+        <Banner2/> 
     </div>
   );
 }

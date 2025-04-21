@@ -5,6 +5,8 @@
 //   return data.data?.[0];
 // }
 
+import Banner from "./components/Banner";
+import Card from "./components/Card";
 import Hero from "./components/Hero";
 import Section from "./components/Section";
 
@@ -18,6 +20,8 @@ export default async function User1Page() {
     <div>
       <Hero/>
       <Section/>
+      <Banner/>
+      <Card/>
     </div>
   );
 }

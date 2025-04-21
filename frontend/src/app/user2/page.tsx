@@ -5,6 +5,9 @@
 //   return data.data?.[0];
 // }
 
+import Hero from "./components/Hero";
+import Section from "./components/Section";
+
 
 export default async function User1Page() {
   // const data = await getHomePageData();
@@ -13,7 +16,8 @@ export default async function User1Page() {
 
   return (
     <div>
-        USER2
+      <Hero/>
+      <Section/>
     </div>
   );
 }

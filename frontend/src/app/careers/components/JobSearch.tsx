@@ -130,7 +130,7 @@ export default function JobSearch() {
     .filter((category) => category.visible)
 
   return (
-    <section className="bg-gray-950 text-white py-16">
+    <section className=" text-white py-16">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-purple-400">Openings</h2>
@@ -138,7 +138,7 @@ export default function JobSearch() {
             <Input
               type="text"
               placeholder="Search jobs..."
-              className="pl-10 bg-gray-900 border-gray-700 text-white"
+              className="pl-10  border-gray-700 text-white"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -150,10 +150,10 @@ export default function JobSearch() {
           <p className="text-sm text-gray-400 mb-2">Filter by:</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full sm:w-[200px] bg-gray-900 border-gray-700 text-white">
+              <SelectTrigger className="w-full sm:w-[200px]  border-gray-700 text-white">
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-900 border-gray-700 text-white">
+              <SelectContent className=" border-gray-700 text-white">
                 <SelectItem value="all">All categories</SelectItem>
                 {jobCategories.map((category) => (
                   <SelectItem key={category.name} value={category.name}>
@@ -164,10 +164,10 @@ export default function JobSearch() {
             </Select>
 
             <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-              <SelectTrigger className="w-full sm:w-[200px] bg-gray-900 border-gray-700 text-white">
+              <SelectTrigger className="w-full sm:w-[200px] border-gray-700 text-white">
                 <SelectValue placeholder="All locations" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-900 border-gray-700 text-white">
+              <SelectContent className=" border-gray-700 text-white">
                 <SelectItem value="all">All locations</SelectItem>
                 {locations.map((location) => (
                   <SelectItem key={location} value={location}>
@@ -186,7 +186,7 @@ export default function JobSearch() {
             <div key={category.name} className="border-b border-gray-800">
               <Button
                 variant="ghost"
-                className="w-full justify-between py-4 text-left hover:bg-gray-900"
+                className="w-full justify-between py-4 text-left hover:bg-zinc-800"
                 onClick={() => toggleCategory(index)}
               >
                 <span className="text-lg font-medium">{category.name}</span>
@@ -200,7 +200,7 @@ export default function JobSearch() {
               {category.isOpen && category.jobs.length > 0 && (
                 <div className="py-2 space-y-4">
                   {category.jobs.map((job) => (
-                    <div key={`${job.title}-${job.location}`} className="pl-4 pr-2 py-2 hover:bg-gray-900 rounded-md">
+                    <div key={`${job.title}-${job.location}`} className="pl-4 pr-2 py-2 hover:bg-zinc-800 rounded-md">
                       <h3 className="font-medium">{job.title}</h3>
                       <p className="text-sm text-gray-400">{job.location}</p>
                     </div>

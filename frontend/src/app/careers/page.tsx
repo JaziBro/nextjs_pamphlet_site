@@ -1,4 +1,6 @@
+import Features from "./components/Features";
 import Hero from "./components/Hero";
+import JobSearch from "./components/JobSearch";
 
 
 // async function getHomePageData() {
@@ -15,6 +17,8 @@ export default async function HomePage() {
   return (
     <div>
       <Hero/>
+      <Features />
+      <JobSearch />
     </div>
   );
 }

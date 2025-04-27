@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { DialogTitle } from "@/components/ui/dialog"
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -53,6 +54,7 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-zinc-900 text-white">
+            <DialogTitle className="text-lg font-semibold">Menu</DialogTitle>
               <nav className="flex flex-col space-y-4 pt-10">
                 <Link href="/user1" className="text-sm font-medium hover:text-gray-300">
                   USER1

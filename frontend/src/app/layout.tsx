@@ -6,6 +6,7 @@ import { initLogRocket } from '@/lib/logrocket';
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import GoogleAnalytics from "./components/GoogleAnalytics";
 import { useEffect } from "react";
 
 const geistSans = Geist({
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-900 min-h-screen flex flex-col`}
       >
+        <GoogleAnalytics GA_MEASUREMENT_ID="G-4C6HBW0324" />
         <NavBar />
         <main className="flex-grow">{children}</main>
         <Footer />

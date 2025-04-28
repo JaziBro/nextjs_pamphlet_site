@@ -1,10 +1,11 @@
 "use client";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { FaEthereum } from "react-icons/fa6";
-import { Gift } from "lucide-react"
+import { FaEthereum, FaCreditCard } from "react-icons/fa6";
+import { Gift } from "lucide-react";
 import { createTransak } from "../paymentGateway/transak";
-import { createPaymentGateway } from "../paymentGateway/factory";
+import { createStripe } from "../paymentGateway/stripe"; // 👈 Import stripe creator
 
 declare global {
   interface Window {
@@ -12,11 +13,12 @@ declare global {
   }
 }
 
-
 export default function GiftShop() {
   const [count, setCount] = useState<number>(1);
   const [walletAddress, setWalletAddress] = useState<string>('');
-  const [transak, setTransak] = useState<any>(null);
+  const [paymentGateway, setPaymentGateway] = useState<any>(null);
+  const [paymentName, setPaymentName] = useState<string>("Crypto Pay (via Transak)");
+  const [showOptions, setShowOptions] = useState<boolean>(false);
 
   useEffect(() => {
     async function getWalletAddress() {
@@ -34,16 +36,45 @@ export default function GiftShop() {
   useEffect(() => {
     if (walletAddress) {
       const transakInstance = createTransak(walletAddress);
-      setTransak(transakInstance);
+      setPaymentGateway(transakInstance); // default payment is transak
     }
   }, [walletAddress]);
 
-  const handlePayment = () => {
-    if (transak) {
-      transak.init();
-    } else {
+  const handlePayment = async () => {
+    if (!paymentGateway) {
       alert('Payment gateway not ready yet!');
+      return;
     }
+
+    if (paymentName.includes('Crypto')) {
+      paymentGateway.init(); // Transak opens
+    } else if (paymentName.includes('Stripe')) {
+      const stripe = await paymentGateway;
+      const { error } = await stripe.redirectToCheckout({
+        lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity: 1 }], // Replace with your Stripe test product Price ID
+        mode: "payment",
+        successUrl: window.location.origin + "/success",
+        cancelUrl: window.location.origin + "/cancel",
+      });
+      if (error) console.error(error.message);
+    }
+  };
+
+  const handleChangePayment = () => {
+    setShowOptions(true);
+  };
+
+  const selectGateway = async (gateway: "transak" | "stripe") => {
+    if (gateway === "transak") {
+      const transakInstance = createTransak(walletAddress);
+      setPaymentGateway(transakInstance);
+      setPaymentName("Crypto Pay (via Transak)");
+    } else if (gateway === "stripe") {
+      const stripeInstance = await createStripe();
+      setPaymentGateway(stripeInstance);
+      setPaymentName("Card Payment (via Stripe)");
+    }
+    setShowOptions(false);
   };
 
   return (
@@ -72,16 +103,21 @@ export default function GiftShop() {
 
       {/* Payment + Counter aligned in row */}
       <div className="flex flex-col md:flex-row gap-6 w-full max-w-4xl">
-        {/* Google Pay */}
+        {/* Payment Card */}
         <div className="flex-1 flex">
           <div className="bg-[#1c1c1e]/80 backdrop-blur-lg rounded-2xl p-6 w-full shadow-lg flex flex-col justify-between">
             <p className="text-gray-400 text-center">Pay Using</p>
             <div className="flex justify-between items-center bg-zinc-800 px-4 py-3 rounded-xl">
               <div className="flex items-center gap-3">
-                <FaEthereum width={24} height={24} />
-                <span>Crypto Pay (via Transak)</span>
+                {paymentName.includes('Crypto') ? <FaEthereum width={24} height={24}/> : <FaCreditCard width={24} height={24}/>}
+                <span>{paymentName}</span>
               </div>
-              <button className="text-pink-400 hover:underline">Change ➤</button>
+              <button
+                className="text-pink-400 hover:underline"
+                onClick={handleChangePayment}
+              >
+                Change ➤
+              </button>
             </div>
           </div>
         </div>
@@ -147,9 +183,36 @@ export default function GiftShop() {
         >
           Pay ${count * 25}
         </button>
-
-
       </div>
+
+      {/* Payment Options Modal */}
+      {showOptions && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-zinc-800 p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Choose Payment Method</h2>
+            <div className="flex flex-col gap-4">
+              <button
+                className="bg-pink-500 py-2 rounded-lg"
+                onClick={() => selectGateway("transak")}
+              >
+                Crypto Pay (via Transak)
+              </button>
+              <button
+                className="bg-blue-500 py-2 rounded-lg"
+                onClick={() => selectGateway("stripe")}
+              >
+                Card Payment (via Stripe)
+              </button>
+            </div>
+            <button
+              className="mt-6 text-gray-400 hover:text-white"
+              onClick={() => setShowOptions(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,20 +1,12 @@
-// paymentGateways/factory.ts
-
-import { createBanxa } from './banxa';
-import { createMoonpay } from './moonpay';
 import { createTransak } from './transak';
-import { createRamp } from './ramp';
+import { createStripe } from './stripe';
 
-export function createPaymentGateway(name: string, walletAddress: string) {
+export function createPaymentGateway(name: string, walletAddress?: string) {
   switch (name) {
-    // case 'banxa':
-    //   return createBanxa(walletAddress);
-    // case 'moonpay':
-    //   return createMoonpay(walletAddress);
     case 'transak':
-      return createTransak(walletAddress);
-    // case 'ramp':
-    //   return createRamp(walletAddress);
+      return createTransak(walletAddress!);
+    case 'stripe':
+      return createStripe();
     default:
       throw new Error('Unsupported payment gateway');
   }

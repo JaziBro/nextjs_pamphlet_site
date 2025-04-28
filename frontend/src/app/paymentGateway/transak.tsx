@@ -4,7 +4,7 @@ import { Transak, TransakConfig } from '@transak/transak-sdk';
 
 export function createTransak(walletAddress: string) {
   const transakConfig: TransakConfig = {
-    apiKey: 'a46b3e00-b887-426a-9599-7c541ee0e992' , // Ensure this is defined in your .env file
+    apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY || "" , // Ensure this is defined in your .env file
     environment: Transak.ENVIRONMENTS.STAGING, // Use 'STAGING' if your API key is for staging
     walletAddress: walletAddress,
     themeColor: '000000',

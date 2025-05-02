@@ -11,34 +11,53 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "hero_title": {
-      "type": "string"
-    },
-    "hero_subtitle": {
-      "type": "string"
-    },
-    "hero_image": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "features": {
-      "displayName": "FeatureItem ",
+    "hero": {
+      "displayName": "hero",
       "type": "component",
       "repeatable": true,
-      "component": "shared.feature-item"
+      "component": "shared.hero"
     },
-    "testimonial_section": {
-      "displayName": "Testimonial",
+    "component_1": {
+      "displayName": "component_1",
       "type": "component",
       "repeatable": true,
-      "component": "shared.testimonial"
+      "component": "shared.component-1"
+    },
+    "team": {
+      "displayName": "team",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.team"
+    },
+    "component_3": {
+      "displayName": "component_3",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-3"
+    },
+    "component_4": {
+      "displayName": "component_4",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-4"
+    },
+    "component_5": {
+      "displayName": "component_5",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-5"
+    },
+    "component_6": {
+      "displayName": "component_6",
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-6"
+    },
+    "component_7": {
+      "displayName": "component_7",
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.component-7"
     }
   }
 }

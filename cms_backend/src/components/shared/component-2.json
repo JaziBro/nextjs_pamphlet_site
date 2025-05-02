@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_shared_component_2s",
+  "info": {
+    "displayName": "component_2",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "feature_1": {
+      "type": "string"
+    },
+    "feature_2": {
+      "type": "string"
+    },
+    "feature_3": {
+      "type": "string"
+    },
+    "feature_4": {
+      "type": "string"
+    }
+  }
+}

@@ -1,100 +1,76 @@
-"use client"
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import {Home, DollarSign, Clock, Banknote } from "lucide-react";
 
-import { useState } from "react"
-import { Home, Clock, DollarSign, ChevronLeft, ChevronRight } from "lucide-react"
+async function getFeaturesData() {
+  const res = await fetch("http://localhost:1337/api/home-pages?populate[component_1][populate]=*");
+  const data = await res.json();
+  console.log("Fetched data:", data);  // Log the fetched data for debugging
+  return data?.data?.[0]; // Return the first item from the data array
+}
 
-export default function FeaturesSection() {
-  const [currentSlide, setCurrentSlide] = useState(0)
+export default async function FeaturesSection() {
+  const data = await getFeaturesData();
+  console.log("Fetched data for FeaturesSection:", data);
 
-  // Feature data with icons
-  const features = [
-    {
-      icon: <Home className="h-5 w-5 text-gray-400" />,
-      title: "Feature One",
-      description: "Comprehensive description of the first feature and its benefits",
-      progress: 80,
-    },
-    {
-      icon: <Clock className="h-5 w-5 text-gray-400" />,
-      title: "Feature Two",
-      description: "Detailed explanation of the second feature and how it works",
-      progress: 65,
-    },
-    {
-      icon: <DollarSign className="h-5 w-5 text-gray-400" />,
-      title: "Feature Three",
-      description: "Information about the third feature and its value proposition",
-      progress: 90,
-    },
-  ]
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === features.length - 1 ? 0 : prev + 1))
+  if (!data) {
+    return <div>No data available</div>;
   }
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1))
-  }
+  const component1 = data?.component_1?.[0]; // Get the first item in component_1
+  const image = component1?.image?.[0]; // Get the image if available
 
   return (
-    <section className="w-full bg-zinc-900 py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          {/* Left side - Features content */}
-          <div className="space-y-6">
-            {/* Heading and subheading */}
-            <div className="space-y-3">
-              <div className="h-6 w-48 rounded bg-zinc-800"></div>
-              <div className="h-5 w-64 rounded bg-zinc-800"></div>
+    <section className="py-12 px-4 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+      <div className="flex flex-col md:w-1/2">
+        <h2 className="text-3xl font-bold mb-6 text-white">{component1?.title}</h2>
+
+        <div className="flex flex-col gap-4 mb-6 text-left text-gray-300">
+          {component1?.feature_1 && (
+            <div className="flex items-center space-x-2">
+              <Home className="text-xl" /> {/* FontAwesome Check Icon */}
+              <p>{component1.feature_1}</p>
             </div>
-
-            {/* Feature with progress bars */}
-            <div className="mt-8 space-y-6">
-              {features.map((feature, index) => (
-                <div key={index} className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-800">
-                      {feature.icon}
-                    </div>
-                    <div className="space-y-1">
-                      <div className="h-4 w-36 rounded bg-zinc-800"></div>
-                      <div className="h-3 w-48 rounded bg-zinc-800"></div>
-                    </div>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-800">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-gray-500 to-gray-300"
-                      style={{ width: `${feature.progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+          )}
+          {component1?.feature_2 && (
+            <div className="flex items-center space-x-2">
+              <DollarSign className="text-xl" />
+              <p>{component1.feature_2}</p>
             </div>
-
-            {/* Navigation controls */}
-            <div className="mt-8 flex items-center space-x-4">
-              <button
-                onClick={prevSlide}
-                className="flex h-10 w-24 items-center justify-center rounded-full bg-zinc-800 text-white hover:bg-zinc-700"
-              >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                <span className="text-xs">Prev</span>
-              </button>
-
-              <button
-                onClick={nextSlide}
-                className="flex h-10 w-36 items-center justify-center rounded-full bg-zinc-800 text-white hover:bg-zinc-700"
-              >
-                <span className="text-xs">Next Feature</span>
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </button>
+          )}
+          {component1?.feature_3 && (
+            <div className="flex items-center space-x-2">
+              <Clock className="text-xl" />
+              <p>{component1.feature_3}</p>
             </div>
-          </div>
+          )}
+          {component1?.feature_4 && (
+            <div className="flex items-center space-x-2">
+              <Banknote className="text-xl" />
+              <p>{component1.feature_4}</p>
+            </div>
+          )}
+        </div>
 
-          {/* Right side - Gradient image */}
-          <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-400 md:h-80"></div>
+        <div className="flex gap-4 mb-6">
+          {component1?.button_1 && (
+            <Button variant="outline" className="rounded-md bg-zinc-800 text-white hover:bg-zinc-700" size="sm">
+              {component1.button_1}
+            </Button>
+          )}
+          {component1?.button_2 && (
+            <Button variant="outline" className="rounded-md bg-zinc-800 text-white hover:bg-zinc-700" size="sm">
+              {component1.button_2}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="md:w-1/2">
+        <div className="relative w-full h-80 rounded-md overflow-hidden">
+          {image && <Image src={`http://localhost:1337${image.url}`} alt="Component Image" layout="fill" objectFit="cover" />}
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,78 +1,95 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Maximize2, Share2, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function ProductShowcase() {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [component4, setComponent4] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Product features data
-  const features = [
-    {
-      id: 1,
-      title: "Feature One",
-      description: "Detailed description of the first feature and its benefits.",
-      icon: <Maximize2 className="h-5 w-5 text-gray-400" />,
-    },
-    {
-      id: 2,
-      title: "Feature Two",
-      description: "Comprehensive explanation of the second feature and how it works.",
-      icon: <Share2 className="h-5 w-5 text-gray-400" />,
-    },
-    {
-      id: 3,
-      title: "Feature Three",
-      description: "Information about the third feature and its value proposition.",
-      icon: <MessageSquare className="h-5 w-5 text-gray-400" />,
-    },
-  ]
+  useEffect(() => {
+    const fetchComponent4 = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:1337/api/home-pages?populate[component_4][populate][0]=image"
+        )
+        if (!res.ok) {
+          throw new Error(`HTTP Error: ${res.status}`)
+        }
+        const json = await res.json()
+        console.log("Full API Response:", json)
+        const comp = json?.data?.[0]?.component_4?.[0]
+        setComponent4(comp ?? null)
+      } catch (e: any) {
+        console.error("Fetch error:", e)
+        setError(e.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchComponent4()
+  }, [])
 
-  const nextSlide = () => {
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error}</div>
+  if (!component4) return <div>No component 4 data found.</div>
+
+  const image = component4.image?.[0]
+  const { title, feature_1, feature_2, feature_3, button_1 } = component4
+  const features = [feature_1, feature_2, feature_3]
+
+  const nextSlide = () =>
     setCurrentSlide((prev) => (prev === features.length - 1 ? 0 : prev + 1))
-  }
-
-  const prevSlide = () => {
+  const prevSlide = () =>
     setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1))
-  }
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          {/* Left side - Gradient image */}
-          <div className="h-80 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-96"></div>
+          {/* Left side - Image */}
+          <div className="h-80 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-96">
+            {image && (
+              <img
+                src={`http://localhost:1337${image.url}`}
+                alt={image.alternativeText || "Feature image"}
+                className="h-full w-full object-cover"
+              />
+            )}
+          </div>
 
           {/* Right side - Product features */}
           <div className="space-y-8">
-            {/* Heading and subheading */}
+            {/* Heading */}
             <div className="space-y-3">
-              <div className="h-6 w-64 rounded bg-zinc-800"></div>
-              <div className="h-5 w-full rounded bg-zinc-800"></div>
+              <h2 className="text-white text-3xl">{title}</h2>
             </div>
 
-            {/* Feature box with light background */}
+            {/* Feature box */}
             <div className="rounded-lg bg-zinc-800/50 p-6">
-              {/* Feature items */}
               <div className="space-y-6">
-                {features.map((feature) => (
-                  <div key={feature.id} className="space-y-2">
+                {features.map((feat, idx) => (
+                  <div key={idx} className="space-y-2">
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-800">
-                        {feature.icon}
+                        {idx === 0 && <Maximize2 className="h-5 w-5 text-gray-400" />}
+                        {idx === 1 && <Share2 className="h-5 w-5 text-gray-400" />}
+                        {idx === 2 && <MessageSquare className="h-5 w-5 text-gray-400" />}
                       </div>
-                      <div className="h-4 w-48 rounded bg-zinc-700"></div>
+                      <span className="text-white">{feat}</span>
                     </div>
                     <div className="ml-11">
-                      <div className="h-3 w-full rounded bg-zinc-700"></div>
+                      <p className="mt-2 text-gray-300">{/* optional description */}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Navigation controls */}
+            {/* Navigation */}
             <div className="flex justify-end">
               <div className="flex items-center space-x-2">
                 <Button
@@ -93,6 +110,13 @@ export default function ProductShowcase() {
                 </Button>
               </div>
             </div>
+
+            {/* CTA Button */}
+            {button_1 && (
+              <Button className="mt-4 rounded-full bg-zinc-800 text-white hover:bg-zinc-700">
+                {button_1}
+              </Button>
+            )}
           </div>
         </div>
       </div>

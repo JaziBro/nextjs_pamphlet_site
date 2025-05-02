@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_shared_component_1s",
+  "info": {
+    "displayName": "component_1",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "feature_1": {
+      "type": "string"
+    },
+    "feature_2": {
+      "type": "string"
+    },
+    "feature_3": {
+      "type": "string"
+    },
+    "button_1": {
+      "type": "string"
+    },
+    "button_2": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "feature_4": {
+      "type": "string"
+    }
+  }
+}

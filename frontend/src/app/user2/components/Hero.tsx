@@ -1,66 +1,91 @@
 "use client"
 
-import { useState } from "react"
-import { ArrowDownLeft, ArrowDownRight, ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { useEffect, useState } from "react"
+import { ChevronLeft, ChevronRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+
+interface UserType2Data {
+  hero_title: string
+  hero_subtitle: string
+  hero_button: string
+  imageUrl?: string
+}
 
 export default function FileUploadSection() {
   const [progress, setProgress] = useState(70)
   const [isChecked, setIsChecked] = useState(true)
+  const [data, setData] = useState<UserType2Data | null>(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:1337/api/user-type-2-pages?populate[hero][populate]=hero_image")
+        const json = await res.json()
+
+        const hero = json?.data?.[0]?.hero?.[0]
+        const imageUrl = hero?.hero_image?.[0]?.url
+
+        if (hero) {
+          setData({
+            hero_title: hero.hero_title,
+            hero_subtitle: hero.hero_subtitle,
+            hero_button: hero.hero_button,
+            imageUrl: imageUrl ? `http://localhost:1337${imageUrl}` : undefined,
+          })
+        }
+      } catch (error) {
+        console.error("Failed to fetch user-type-2 data:", error)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (!data) {
+    return <div className="text-center text-white py-20">Loading...</div>
+  }
 
   return (
     <section className="relative w-full bg-zinc-900 py-16 md:py-24 mt-10">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          {/* Left side - Upload area with arrow */}
+          {/* Left side - Image */}
           <div className="relative">
-            <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-80"></div>
-            <div className="absolute left-0 top-0 -translate-x-1/4 -translate-y-1/4"></div>
+            {data.imageUrl ? (
+              <img
+                src={data.imageUrl}
+                alt="Hero"
+                className="h-64 w-full object-cover rounded-md md:h-80"
+              />
+            ) : (
+              <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-80" />
+            )}
           </div>
 
-          {/* Right side - Form fields and controls */}
+          {/* Right side - Content */}
           <div className="flex flex-col space-y-6">
-            {/* Content area */}
-            <div className="relative">
-              <div className="h-32 w-full rounded-md bg-zinc-800"></div>
-              <div className="absolute right-0 top-0 -translate-y-1/4"></div>
+            {/* Hero content */}
+            <div className="space-y-3">
+              <h1 className="text-3xl font-bold text-white">{data.hero_title}</h1>
+              <p className="text-sm text-zinc-400">{data.hero_subtitle}</p>
+              <Button className="bg-pink-600 hover:bg-pink-700 text-white">
+                {data.hero_button}
+              </Button>
             </div>
-
-            {/* Progress bar */}
-            <Progress value={progress} className="h-2 w-full bg-zinc-800" />
-
-            {/* Additional field */}
-            <div className="h-10 w-full rounded-md bg-zinc-800"></div>
-
             {/* Checkbox with label */}
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3 cursor-pointer"
+              onClick={() => setIsChecked(!isChecked)}
+            >
               <div
-                className={`flex h-5 w-5 items-center justify-center rounded ${isChecked ? "bg-pink-600" : "bg-zinc-700"}`}
-                onClick={() => setIsChecked(!isChecked)}
+                className={`flex h-5 w-5 items-center justify-center rounded ${
+                  isChecked ? "bg-pink-600" : "bg-zinc-700"
+                }`}
               >
                 {isChecked && <Check className="h-3 w-3 text-white" />}
               </div>
-              <div className="h-4 w-48 rounded bg-zinc-800"></div>
-            </div>
-
-            {/* Navigation controls */}
-            <div className="flex items-center justify-between">
-              <Button
-                size="icon"
-                variant="outline"
-                className="h-8 w-8 rounded-full border-zinc-700 bg-transparent text-white hover:bg-zinc-800"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <div className="h-4 w-16 rounded bg-zinc-800"></div>
-              <Button
-                size="icon"
-                variant="outline"
-                className="h-8 w-8 rounded-full border-zinc-700 bg-transparent text-white hover:bg-zinc-800"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
+              <span className="text-sm text-white">I agree to the terms</span>
             </div>
           </div>
         </div>

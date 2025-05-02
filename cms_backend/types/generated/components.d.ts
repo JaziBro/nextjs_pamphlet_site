@@ -1,5 +1,128 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface SharedComponent1 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_1s';
+  info: {
+    description: '';
+    displayName: 'component_1';
+  };
+  attributes: {
+    button_1: Schema.Attribute.String;
+    button_2: Schema.Attribute.String;
+    feature_1: Schema.Attribute.String;
+    feature_2: Schema.Attribute.String;
+    feature_3: Schema.Attribute.String;
+    feature_4: Schema.Attribute.String;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent2 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_2s';
+  info: {
+    description: '';
+    displayName: 'component_2';
+  };
+  attributes: {
+    feature_1: Schema.Attribute.String;
+    feature_2: Schema.Attribute.String;
+    feature_3: Schema.Attribute.String;
+    feature_4: Schema.Attribute.String;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent3 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_3s';
+  info: {
+    description: '';
+    displayName: 'component_3';
+  };
+  attributes: {
+    button_1: Schema.Attribute.String;
+    feature_1: Schema.Attribute.String;
+    feature_2: Schema.Attribute.String;
+    feature_3: Schema.Attribute.String;
+    feature_4: Schema.Attribute.String;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent4 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_4s';
+  info: {
+    description: '';
+    displayName: 'component_4';
+  };
+  attributes: {
+    feature_1: Schema.Attribute.String;
+    feature_2: Schema.Attribute.String;
+    feature_3: Schema.Attribute.String;
+    feature_4: Schema.Attribute.String;
+    feature_5: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent5 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_5s';
+  info: {
+    description: '';
+    displayName: 'component_5';
+  };
+  attributes: {
+    feature_1: Schema.Attribute.String;
+    feature_2: Schema.Attribute.String;
+    feature_3: Schema.Attribute.String;
+    feature_4: Schema.Attribute.String;
+    feature_5: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent6 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_6s';
+  info: {
+    displayName: 'component_6';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface SharedComponent7 extends Struct.ComponentSchema {
+  collectionName: 'components_shared_component_7s';
+  info: {
+    displayName: 'component_7';
+  };
+  attributes: {
+    button: Schema.Attribute.String;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    subtitle: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedFeatureItem extends Struct.ComponentSchema {
   collectionName: 'components_shared_feature_item_s';
   info: {
@@ -45,6 +168,23 @@ export interface SharedFooterLinks extends Struct.ComponentSchema {
   attributes: {
     label: Schema.Attribute.String;
     url: Schema.Attribute.String;
+  };
+}
+
+export interface SharedHero extends Struct.ComponentSchema {
+  collectionName: 'components_shared_heroes';
+  info: {
+    description: '';
+    displayName: 'hero';
+  };
+  attributes: {
+    hero_button: Schema.Attribute.String;
+    hero_image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    hero_subtitle: Schema.Attribute.String;
+    hero_title: Schema.Attribute.String;
   };
 }
 
@@ -156,6 +296,30 @@ export interface SharedSlider extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedTeam extends Struct.ComponentSchema {
+  collectionName: 'components_shared_teams';
+  info: {
+    displayName: 'team';
+  };
+  attributes: {
+    team_1_image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    team_1_title: Schema.Attribute.String;
+    team_2_image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    team_2_title: Schema.Attribute.String;
+    team_3_image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    team_3_title: Schema.Attribute.String;
+  };
+}
+
 export interface SharedTestimonial extends Struct.ComponentSchema {
   collectionName: 'components_shared_testimonials';
   info: {
@@ -176,10 +340,18 @@ export interface SharedTestimonial extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'shared.component-1': SharedComponent1;
+      'shared.component-2': SharedComponent2;
+      'shared.component-3': SharedComponent3;
+      'shared.component-4': SharedComponent4;
+      'shared.component-5': SharedComponent5;
+      'shared.component-6': SharedComponent6;
+      'shared.component-7': SharedComponent7;
       'shared.feature-item': SharedFeatureItem;
       'shared.features': SharedFeatures;
       'shared.features9': SharedFeatures9;
       'shared.footer-links': SharedFooterLinks;
+      'shared.hero': SharedHero;
       'shared.job-listings': SharedJobListings;
       'shared.media': SharedMedia;
       'shared.page-section': SharedPageSection;
@@ -188,6 +360,7 @@ declare module '@strapi/strapi' {
       'shared.sections': SharedSections;
       'shared.seo': SharedSeo;
       'shared.slider': SharedSlider;
+      'shared.team': SharedTeam;
       'shared.testimonial': SharedTestimonial;
     }
   }

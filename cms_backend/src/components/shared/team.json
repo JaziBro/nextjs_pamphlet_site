@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_shared_teams",
+  "info": {
+    "displayName": "team"
+  },
+  "options": {},
+  "attributes": {
+    "team_1_title": {
+      "type": "string"
+    },
+    "team_1_image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "team_2_title": {
+      "type": "string"
+    },
+    "team_2_image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "team_3_title": {
+      "type": "string"
+    },
+    "team_3_image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    }
+  }
+}

@@ -11,20 +11,35 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "title": {
-      "type": "string"
-    },
-    "cta_button_text": {
-      "type": "string"
-    },
-    "cta_link": {
-      "type": "string"
-    },
-    "sections": {
-      "displayName": "sections",
+    "hero": {
       "type": "component",
       "repeatable": true,
-      "component": "shared.sections"
+      "component": "shared.hero"
+    },
+    "component_1": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-1"
+    },
+    "component_2": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-2"
+    },
+    "component_3": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-3"
+    },
+    "component_4": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.component-3"
+    },
+    "team": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.team"
     }
   }
 }

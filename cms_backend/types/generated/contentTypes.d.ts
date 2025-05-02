@@ -577,16 +577,16 @@ export interface ApiHomePageHomePage extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    component_1: Schema.Attribute.Component<'shared.component-1', true>;
+    component_3: Schema.Attribute.Component<'shared.component-3', true>;
+    component_4: Schema.Attribute.Component<'shared.component-4', true>;
+    component_5: Schema.Attribute.Component<'shared.component-5', true>;
+    component_6: Schema.Attribute.Component<'shared.component-6', true>;
+    component_7: Schema.Attribute.Component<'shared.component-7', false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    features: Schema.Attribute.Component<'shared.feature-item', true>;
-    hero_image: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
-    hero_subtitle: Schema.Attribute.String;
-    hero_title: Schema.Attribute.String;
+    hero: Schema.Attribute.Component<'shared.hero', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -594,7 +594,7 @@ export interface ApiHomePageHomePage extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    testimonial_section: Schema.Attribute.Component<'shared.testimonial', true>;
+    team: Schema.Attribute.Component<'shared.team', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -645,11 +645,14 @@ export interface ApiUserType1PageUserType1Page
     draftAndPublish: true;
   };
   attributes: {
+    component_1: Schema.Attribute.Component<'shared.component-1', true>;
+    component_2: Schema.Attribute.Component<'shared.component-2', true>;
+    component_3: Schema.Attribute.Component<'shared.component-3', true>;
+    component_4: Schema.Attribute.Component<'shared.component-4', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    cta_button_text: Schema.Attribute.String;
-    cta_link: Schema.Attribute.String;
+    hero: Schema.Attribute.Component<'shared.hero', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -657,8 +660,6 @@ export interface ApiUserType1PageUserType1Page
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    sections: Schema.Attribute.Component<'shared.page-section', true>;
-    title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -678,11 +679,14 @@ export interface ApiUserType2PageUserType2Page
     draftAndPublish: true;
   };
   attributes: {
+    component_1: Schema.Attribute.Component<'shared.component-1', true>;
+    component_2: Schema.Attribute.Component<'shared.component-2', true>;
+    component_3: Schema.Attribute.Component<'shared.component-3', true>;
+    component_4: Schema.Attribute.Component<'shared.component-3', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    cta_button_text: Schema.Attribute.String;
-    cta_link: Schema.Attribute.String;
+    hero: Schema.Attribute.Component<'shared.hero', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -690,8 +694,7 @@ export interface ApiUserType2PageUserType2Page
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    sections: Schema.Attribute.Component<'shared.sections', true>;
-    title: Schema.Attribute.String;
+    team: Schema.Attribute.Component<'shared.team', true>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

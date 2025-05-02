@@ -1,13 +1,5 @@
-// next.config.mjs
-const nextConfig = {
+module.exports = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
+    domains: ['localhost', 'http://localhost:1337/'],
   },
 };
-
-export default nextConfig;

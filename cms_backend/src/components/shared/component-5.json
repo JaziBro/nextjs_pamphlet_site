@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_shared_component_5s",
+  "info": {
+    "displayName": "component_5",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "feature_1": {
+      "type": "string"
+    },
+    "feature_2": {
+      "type": "string"
+    },
+    "feature_3": {
+      "type": "string"
+    },
+    "feature_4": {
+      "type": "string"
+    },
+    "feature_5": {
+      "type": "string"
+    }
+  }
+}

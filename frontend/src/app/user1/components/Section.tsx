@@ -1,54 +1,87 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
+
+type Component2Data = {
+  title?: string
+  feature_1: string
+  feature_2: string
+  feature_3: string
+  feature_4: string
+  image: { url: string; alternativeText?: string }[]
+}
 
 export default function Section() {
   const [currentPage, setCurrentPage] = useState(0)
-
-  // Steps or FAQ items
-  const stepGroups = [
-    [
-      { number: 1, text: "First step description or FAQ question with detailed explanation." },
-      { number: 2, text: "Second step description with instructions on how to proceed." },
-      { number: 3, text: "Third step with additional information and guidance." },
-      { number: 4, text: "Final step with completion details and next actions." },
-    ],
-    [
-      { number: 5, text: "Additional step one with more information and details." },
-      { number: 6, text: "Additional step two with further instructions." },
-      { number: 7, text: "Additional step three with more guidance." },
-      { number: 8, text: "Additional step four with final details." },
-    ],
-  ]
+  const [data, setData] = useState<Component2Data | null>(null)
 
   const nextPage = () => {
     setCurrentPage((prev) => (prev === stepGroups.length - 1 ? 0 : prev + 1))
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate[component_2][populate]=*")
+        const json = await res.json()
+        const comp2 = json.data?.[0]?.component_2?.[0]
+        setData(comp2)
+        console.log("✅ Fetched component_2:", comp2)
+      } catch (err) {
+        console.error("❌ Failed to fetch component_2:", err)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  const stepGroups = data
+    ? [
+        [
+          { number: 1, text: data.feature_1 },
+          { number: 2, text: data.feature_2 },
+          { number: 3, text: data.feature_3 },
+          { number: 4, text: data.feature_4 },
+        ],
+      ]
+    : []
+
+  if (!data || !data.image?.[0]) {
+    return <div className="text-center text-red-500">No component_2 content found.</div>
+  }
+
+  const image = data.image[0]
+  const imageUrl = new URL(image.url, "http://localhost:1337").href
+
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          {/* Left side - Gradient image */}
-          <div className="h-80 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-96"></div>
+          {/* Left side - Image from API */}
+          <div className="relative h-80 w-full overflow-hidden rounded-md md:h-96">
+            <Image
+              src={imageUrl}
+              alt={image.alternativeText || "Feature image"}
+              fill
+              className="object-cover rounded-md"
+            />
+          </div>
 
           {/* Right side - Steps or FAQ content */}
           <div className="flex flex-col">
-            {/* Heading */}
-            <div className="mb-4 h-4 w-48 rounded bg-zinc-800"></div>
+            <h2 className="mb-4 text-2xl font-bold text-white">{data.title || "Our Features"}</h2>
 
-            {/* Content box */}
             <div className="rounded-lg bg-zinc-800/50 p-6">
-              {/* Steps list */}
               <div className="mb-6 space-y-6">
                 {stepGroups[currentPage].map((step) => (
                   <div key={step.number} className="flex items-start gap-3">
                     <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-700 text-xs text-white">
                       {step.number}
                     </div>
-                    <div className="h-4 w-full rounded bg-zinc-700"></div>
+                    <p className="text-sm text-white">{step.text}</p>
                   </div>
                 ))}
               </div>

@@ -1,55 +1,81 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
+type TeamMember = {
+  id: number
+  title: string
+  image?: string
+}
+
 export default function Team() {
-    const team = [
-      {
-        id: 1,
-        name: "Person One",
-        role: "Position",
-        content: "Testimonial content or description goes here.",
-      },
-      {
-        id: 2,
-        name: "Person Two",
-        role: "Position",
-        content:
-          "Slightly longer testimonial content or description for the middle card to demonstrate the height difference.",
-      },
-      {
-        id: 3,
-        name: "Person Three",
-        role: "Position",
-        content: "Testimonial content or description goes here.",
-      },
-    ]
-  
-    return (
-      <section className="w-full bg-zinc-900 py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid gap-8 md:grid-cols-3 md:gap-6">
-            {team.map((team, index) => (
-              <div key={team.id} className="flex flex-col items-center">
-                {/* Avatar circle */}
-                <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400"></div>
-  
-                {/* Content card */}
-                <div className={`w-full rounded-md bg-zinc-800 p-6 ${index === 1 ? "h-64" : "h-48"}`}>
-                  {/* Placeholder for content - replace with actual content */}
-                  <div className="space-y-4">
-                    <div className="h-4 w-3/4 rounded bg-zinc-700"></div>
-                    <div className="h-4 w-full rounded bg-zinc-700"></div>
-                    <div className="h-4 w-5/6 rounded bg-zinc-700"></div>
-                  </div>
-                </div>
-  
-                {/* Name/title area */}
-                <div className="mt-4 flex flex-col items-center space-y-2">
-                  <div className="h-4 w-24 rounded bg-zinc-800"></div>
-                  <div className="h-3 w-36 rounded bg-zinc-800"></div>
-                </div>
+  const [team, setTeam] = useState<TeamMember[]>([])
+
+  useEffect(() => {
+    const fetchTeamData = async () => {
+      try {
+        const res = await fetch(
+          'http://localhost:1337/api/user-type-2-pages?populate[team][populate]=*'
+        )
+        const result = await res.json()
+        console.log('Fetched team raw:', result)
+
+        const teamObj = result.data?.[0]?.team?.[0]
+
+        const teamArray: TeamMember[] = [
+          {
+            id: 1,
+            title: teamObj?.team_1_title || 'Team Member 1',
+            image: teamObj?.team_1_image?.[0]?.url,
+          },
+          {
+            id: 2,
+            title: teamObj?.team_2_title || 'Team Member 2',
+            image: teamObj?.team_2_image?.[0]?.url,
+          },
+          {
+            id: 3,
+            title: teamObj?.team_3_title || 'Team Member 3',
+            image: teamObj?.team_3_image?.[0]?.url,
+          },
+        ]
+
+        setTeam(teamArray)
+      } catch (err) {
+        console.error('Failed to fetch team data:', err)
+      }
+    }
+
+    fetchTeamData()
+  }, [])
+
+  return (
+    <section className="w-full bg-zinc-900 py-16 md:py-24">
+      <div className="container mx-auto px-4">
+        <div className="grid gap-8 md:grid-cols-3 md:gap-6">
+          {team.map((member, index) => (
+            <div key={member.id} className="flex flex-col items-center">
+              {/* Avatar circle with image */}
+              <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400">
+                {member.image ? (
+                  <img
+                    src={`http://localhost:1337${member.image}`}
+                    alt={member.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gray-300" />
+                )}
               </div>
-            ))}
-          </div>
+              {/* Name/title area */}
+              <div className="mt-4 flex flex-col items-center space-y-2">
+                <div className="text-white text-lg font-semibold">{member.title}</div>
+                <div className="text-gray-400 text-sm">Team Member</div>
+              </div>
+            </div>
+          ))}
         </div>
-      </section>
-    )
-  }
-  
+      </div>
+    </section>
+  )
+}

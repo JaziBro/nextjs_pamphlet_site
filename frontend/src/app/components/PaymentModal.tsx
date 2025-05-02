@@ -1,11 +1,26 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaEthereum, FaCreditCard } from "react-icons/fa6";
 import { Gift } from "lucide-react";
 import { createTransak } from "../paymentGateway/transak";
-import { createStripe } from "../paymentGateway/stripe"; // 👈 Import stripe creator
+import { createStripe } from "../paymentGateway/stripe";
+import { createPaddle } from "../paymentGateway/paddle";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x.src,
+  iconUrl: markerIcon.src,
+  shadowUrl: markerShadow.src,
+});
 
 declare global {
   interface Window {
@@ -15,18 +30,18 @@ declare global {
 
 export default function GiftShop() {
   const [count, setCount] = useState<number>(1);
-  const [walletAddress, setWalletAddress] = useState<string>('');
+  const [walletAddress, setWalletAddress] = useState<string>("");
   const [paymentGateway, setPaymentGateway] = useState<any>(null);
   const [paymentName, setPaymentName] = useState<string>("Crypto Pay (via Transak)");
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
   useEffect(() => {
     async function getWalletAddress() {
-      if (typeof window.ethereum !== 'undefined') {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (typeof window.ethereum !== "undefined") {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
         setWalletAddress(accounts[0]);
       } else {
-        alert('MetaMask not detected');
+        alert("MetaMask not detected");
       }
     }
 
@@ -34,29 +49,40 @@ export default function GiftShop() {
   }, []);
 
   useEffect(() => {
-    if (walletAddress) {
+    if (walletAddress && paymentName.includes("Crypto")) {
       const transakInstance = createTransak(walletAddress);
-      setPaymentGateway(transakInstance); // default payment is transak
+      setPaymentGateway(transakInstance);
     }
   }, [walletAddress]);
 
   const handlePayment = async () => {
     if (!paymentGateway) {
-      alert('Payment gateway not ready yet!');
+      alert("Payment gateway not ready yet!");
       return;
     }
 
-    if (paymentName.includes('Crypto')) {
-      paymentGateway.init(); // Transak opens
-    } else if (paymentName.includes('Stripe')) {
+    if (paymentName.includes("Crypto")) {
+      paymentGateway.init();
+    } else if (paymentName.includes("Stripe")) {
       const stripe = await paymentGateway;
       const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity: 1 }], // Replace with your Stripe test product Price ID
+        lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity: count }],
         mode: "payment",
         successUrl: window.location.origin + "/success",
         cancelUrl: window.location.origin + "/cancel",
       });
       if (error) console.error(error.message);
+    } else if (paymentName.includes("Paddle")) {
+      if (paymentGateway?.Checkout?.open) {
+        paymentGateway.Checkout.open({
+          override: true,
+          product: "price_1RIxgXRxwT7BLSjxopDAGLAT", // You may dynamically inject priceId later if needed
+          successCallback: () => console.log("Paddle payment successful"),
+          closeCallback: () => console.log("Paddle checkout closed"),
+        });
+      } else {
+        console.error("Paddle checkout not available");
+      }
     }
   };
 
@@ -64,7 +90,7 @@ export default function GiftShop() {
     setShowOptions(true);
   };
 
-  const selectGateway = async (gateway: "transak" | "stripe") => {
+  const selectGateway = async (gateway: "transak" | "stripe" | "paddle") => {
     if (gateway === "transak") {
       const transakInstance = createTransak(walletAddress);
       setPaymentGateway(transakInstance);
@@ -73,6 +99,10 @@ export default function GiftShop() {
       const stripeInstance = await createStripe();
       setPaymentGateway(stripeInstance);
       setPaymentName("Card Payment (via Stripe)");
+    } else if (gateway === "paddle") {
+      const paddleInstance = await createPaddle("pri_01jt122n14vsx60gkzb8t3mnsn");
+      setPaymentGateway(paddleInstance);
+      setPaymentName("Card Payment (via Paddle)");
     }
     setShowOptions(false);
   };
@@ -80,14 +110,13 @@ export default function GiftShop() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12 mt-20">
       <div className="text-center mb-10">
-        <Gift className="w-16 h-16 mx-auto mb-4"/>
+        <Gift className="w-16 h-16 mx-auto mb-4" />
         <h1 className="text-3xl font-bold">The Gift Shop</h1>
         <p className="text-gray-300 mt-2 max-w-md mx-auto">
           Get that hardworking man the best gift, a night out with his future forever buddy!
         </p>
       </div>
 
-      {/* Phone Input */}
       <div className="w-full max-w-md mb-6">
         <label className="text-sm text-gray-400">Phone Number</label>
         <div className="flex items-center mt-1 border border-pink-500 rounded-full overflow-hidden shadow-md">
@@ -101,118 +130,57 @@ export default function GiftShop() {
         </div>
       </div>
 
-      {/* Payment + Counter aligned in row */}
       <div className="flex flex-col md:flex-row gap-6 w-full max-w-4xl">
-        {/* Payment Card */}
-        <div className="flex-1 flex">
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-lg rounded-2xl p-6 w-full shadow-lg flex flex-col justify-between">
+        <div className="flex-1 flex flex-col gap-4">
+          <div className="bg-[#1c1c1e]/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg">
             <p className="text-gray-400 text-center">Pay Using</p>
-            <div className="flex justify-between items-center bg-zinc-800 px-4 py-3 rounded-xl">
+            <div className="flex justify-between items-center bg-zinc-800 px-4 py-3 rounded-xl mt-2">
               <div className="flex items-center gap-3">
-                {paymentName.includes('Crypto') ? <FaEthereum width={24} height={24}/> : <FaCreditCard width={24} height={24}/>}
+                {paymentName.includes("Crypto") ? (
+                  <FaEthereum width={24} height={24} />
+                ) : (
+                  <FaCreditCard width={24} height={24} />
+                )}
                 <span>{paymentName}</span>
               </div>
-              <button
-                className="text-pink-400 hover:underline"
-                onClick={handleChangePayment}
-              >
+              <button className="text-pink-400 hover:underline" onClick={handleChangePayment}>
                 Change ➤
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Counter + Map */}
-        <div className="flex-1 flex">
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-lg rounded-2xl p-6 w-full shadow-lg flex flex-col justify-between">
-            <div className="flex justify-between items-center mb-4">
-              <input
-                type="text"
-                placeholder="Location"
-                className="bg-zinc-800 px-4 py-2 rounded-lg w-1/2 text-white"
-              />
-              <div className="flex items-center gap-3 text-lg">
-                <span className="text-pink-400">${count * 25}</span>
-                <button
-                  onClick={() => setCount((prev) => Math.max(1, prev - 1))}
-                  className="bg-zinc-700 px-2 rounded-full"
-                >
-                  -
+            {showOptions && (
+              <div className="mt-4 space-y-2">
+                <button onClick={() => selectGateway("transak")} className="text-left w-full hover:underline text-sm">
+                  🔹 Crypto (via Transak)
                 </button>
-                <span className="w-6 text-center">{count}</span>
-                <button
-                  onClick={() => setCount((prev) => prev + 1)}
-                  className="bg-zinc-700 px-2 rounded-full"
-                >
-                  +
+                <button onClick={() => selectGateway("stripe")} className="text-left w-full hover:underline text-sm">
+                  💳 Card (via Stripe)
+                </button>
+                <button onClick={() => selectGateway("paddle")} className="text-left w-full hover:underline text-sm">
+                  💳 Card (via Paddle)
                 </button>
               </div>
-            </div>
-
-            {/* Map */}
-            <div>
-              <div className="rounded-xl overflow-hidden mb-2">
-                <Image
-                  src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=1000&auto=format&fit=crop"
-                  alt="Map"
-                  width={400}
-                  height={200}
-                  className="object-cover w-full h-40"
-                />
-              </div>
-              <p className="text-gray-400 text-sm">WESTMINSTER</p>
-              <p className="text-xs text-gray-500 mt-2">The places you could go...</p>
-              <div className="flex flex-wrap gap-2 mt-2 text-sm text-pink-300">
-                <span className="bg-zinc-800 px-2 py-1 rounded-lg">Palace</span>
-                <span className="bg-zinc-800 px-2 py-1 rounded-lg">Temple</span>
-                <span className="bg-zinc-800 px-2 py-1 rounded-lg">Options...</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="flex gap-4 mt-10">
-        <button className="bg-zinc-700 px-6 py-2 rounded-full text-pink-400 hover:bg-zinc-600 shadow-md">
-          Cancel
-        </button>
-        <button
-          className="bg-pink-600 px-6 py-2 rounded-full text-white hover:bg-pink-700 shadow-md"
-          onClick={handlePayment}
-        >
-          Pay ${count * 25}
-        </button>
-      </div>
-
-      {/* Payment Options Modal */}
-      {showOptions && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-zinc-800 p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold mb-4">Choose Payment Method</h2>
-            <div className="flex flex-col gap-4">
-              <button
-                className="bg-pink-500 py-2 rounded-lg"
-                onClick={() => selectGateway("transak")}
-              >
-                Crypto Pay (via Transak)
-              </button>
-              <button
-                className="bg-blue-500 py-2 rounded-lg"
-                onClick={() => selectGateway("stripe")}
-              >
-                Card Payment (via Stripe)
-              </button>
-            </div>
+            )}
             <button
-              className="mt-6 text-gray-400 hover:text-white"
-              onClick={() => setShowOptions(false)}
+              onClick={handlePayment}
+              className="mt-6 w-full bg-pink-600 hover:bg-pink-700 transition-colors py-2 rounded-full"
             >
-              Cancel
+              Pay Now
             </button>
           </div>
         </div>
-      )}
+
+        <div className="flex-1 h-[300px] rounded-2xl overflow-hidden shadow-lg border-2 border-pink-600">
+          <MapContainer center={[33.6844, 73.0479]} zoom={12} style={{ height: "100%", width: "100%" }}>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={[33.6844, 73.0479]}>
+              <Popup>Your gift will be dispatched from here 🎁</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,8 @@ import { FaEthereum, FaCreditCard } from "react-icons/fa6";
 import { Gift } from "lucide-react";
 import { createTransak } from "../paymentGateway/transak";
 import { createStripe } from "../paymentGateway/stripe";
-import { createPaddle } from "../paymentGateway/paddle";
+import { createCryptoInvoice } from "../paymentGateway/nowpayments"; // Import the NOWPayments function
+
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -60,11 +61,18 @@ export default function GiftShop() {
       alert("Payment gateway not ready yet!");
       return;
     }
-
+  
     if (paymentName.includes("Crypto")) {
-      paymentGateway.init();
+      if (paymentName.includes("NOWPayments")) {
+        // For NOWPayments, redirect the user to the invoice URL
+        window.location.href = paymentGateway; // `paymentGateway` here is the invoice URL returned by NOWPayments API
+      } else {
+        // Handle other crypto gateways (e.g., Transak) that have an `init` method
+        paymentGateway.init();
+      }
     } else if (paymentName.includes("Stripe")) {
-      const stripe = await paymentGateway;
+      // Handle Stripe payment
+      const stripe = await paymentGateway; // Assuming paymentGateway is a Stripe object
       const { error } = await stripe.redirectToCheckout({
         lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity: count }],
         mode: "payment",
@@ -73,10 +81,11 @@ export default function GiftShop() {
       });
       if (error) console.error(error.message);
     } else if (paymentName.includes("Paddle")) {
+      // Handle Paddle payment
       if (paymentGateway?.Checkout?.open) {
         paymentGateway.Checkout.open({
           override: true,
-          product: "price_1RIxgXRxwT7BLSjxopDAGLAT", // You may dynamically inject priceId later if needed
+          product: "price_1RIxgXRxwT7BLSjxopDAGLAT", // Dynamically inject priceId if needed
           successCallback: () => console.log("Paddle payment successful"),
           closeCallback: () => console.log("Paddle checkout closed"),
         });
@@ -85,12 +94,13 @@ export default function GiftShop() {
       }
     }
   };
+  
 
   const handleChangePayment = () => {
     setShowOptions(true);
   };
 
-  const selectGateway = async (gateway: "transak" | "stripe" | "paddle") => {
+  const selectGateway = async (gateway: "transak" | "stripe" | "paddle" | "nowpayments") => {
     if (gateway === "transak") {
       const transakInstance = createTransak(walletAddress);
       setPaymentGateway(transakInstance);
@@ -99,13 +109,14 @@ export default function GiftShop() {
       const stripeInstance = await createStripe();
       setPaymentGateway(stripeInstance);
       setPaymentName("Card Payment (via Stripe)");
-    } else if (gateway === "paddle") {
-      const paddleInstance = await createPaddle("pri_01jt122n14vsx60gkzb8t3mnsn");
-      setPaymentGateway(paddleInstance);
-      setPaymentName("Card Payment (via Paddle)");
-    }
+    } else if (gateway === "nowpayments") {
+      const nowPaymentsInstance = await createCryptoInvoice(10); // Replace 10 with your actual amount
+      setPaymentGateway(nowPaymentsInstance);
+      setPaymentName("Crypto Pay (via NOWPayments)");
+    } 
     setShowOptions(false);
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12 mt-20">
@@ -154,6 +165,9 @@ export default function GiftShop() {
                 </button>
                 <button onClick={() => selectGateway("stripe")} className="text-left w-full hover:underline text-sm">
                   💳 Card (via Stripe)
+                </button>
+                <button onClick={() => selectGateway("nowpayments")} className="text-left w-full hover:underline text-sm">
+                  🔹 Crypto (via NOWPayments)
                 </button>
                 <button onClick={() => selectGateway("paddle")} className="text-left w-full hover:underline text-sm">
                   💳 Card (via Paddle)

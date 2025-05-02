@@ -11,6 +11,8 @@ export function createPaymentGateway(name: string, walletAddress?: string, price
     case 'paddle':
       if (!priceId) throw new Error('Paddle requires a priceId');
         return createPaddle(priceId);
+    case 'nowpayments':
+      if (!walletAddress) throw new Error('NOWPayments requires a wallet address');
     default:
       throw new Error('Unsupported payment gateway');
   }

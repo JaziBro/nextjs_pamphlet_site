@@ -17,7 +17,7 @@ export default function Services() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate=*")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate=*")
         const json = await res.json()
 
         console.log("📦 Full response for debugging:", json)

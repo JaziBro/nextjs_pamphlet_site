@@ -19,7 +19,7 @@ export default function Features() {
   useEffect(() => {
     const fetchFeatures = async () => {
       try {
-        const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate[component_1][populate]=*", {
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate[component_1][populate]=*", {
           cache: "no-store",
         });
   
@@ -43,7 +43,7 @@ export default function Features() {
           // Prepend the base URL to the image URL
           const imageUrl = component.image?.[0]?.url;
           if (imageUrl) {
-            setImage(`http://localhost:1337${imageUrl}`); // Or replace localhost with your live URL
+            setImage(`https://cms-backend-kjsu.onrender.com${imageUrl}`); // Or replace localhost with your live URL
           } else {
             setImage(null);
           }

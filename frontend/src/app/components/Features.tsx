@@ -3,7 +3,7 @@ import Image from "next/image";
 import {Home, DollarSign, Clock, Banknote } from "lucide-react";
 
 async function getFeaturesData() {
-  const res = await fetch("http://localhost:1337/api/home-pages?populate[component_1][populate]=*");
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_1][populate]=*");
   const data = await res.json();
   console.log("Fetched data:", data);  // Log the fetched data for debugging
   return data?.data?.[0]; // Return the first item from the data array
@@ -68,7 +68,7 @@ export default async function FeaturesSection() {
 
       <div className="md:w-1/2">
         <div className="relative w-full h-80 rounded-md overflow-hidden">
-          {image && <Image src={`http://localhost:1337${image.url}`} alt="Component Image" layout="fill" objectFit="cover" />}
+          {image && <Image src={`https://cms-backend-kjsu.onrender.com${image.url}`} alt="Component Image" layout="fill" objectFit="cover" />}
         </div>
       </div>
     </section>

@@ -15,7 +15,7 @@ export default function Team() {
     const fetchTeamData = async () => {
       try {
         const res = await fetch(
-          'http://localhost:1337/api/user-type-2-pages?populate[team][populate]=*'
+          'https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[team][populate]=*'
         )
         const result = await res.json()
         console.log('Fetched team raw:', result)
@@ -59,7 +59,7 @@ export default function Team() {
               <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400">
                 {member.image ? (
                   <img
-                    src={`http://localhost:1337${member.image}`}
+                    src={`https://cms-backend-kjsu.onrender.com${member.image}`}
                     alt={member.title}
                     className="h-full w-full object-cover"
                   />

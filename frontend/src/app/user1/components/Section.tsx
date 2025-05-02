@@ -25,7 +25,7 @@ export default function Section() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate[component_2][populate]=*")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate[component_2][populate]=*")
         const json = await res.json()
         const comp2 = json.data?.[0]?.component_2?.[0]
         setData(comp2)
@@ -54,7 +54,7 @@ export default function Section() {
   }
 
   const image = data.image[0]
-  const imageUrl = new URL(image.url, "http://localhost:1337").href
+  const imageUrl = new URL(image.url, "https://cms-backend-kjsu.onrender.com").href
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">

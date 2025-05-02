@@ -16,7 +16,7 @@ export default function ToggleSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate[component_3][populate]=*")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate[component_3][populate]=*")
         const json = await res.json()
 
         const comp3 = json.data?.[0]?.component_3?.[0]

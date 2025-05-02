@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 async function getHomePageData() {
-  const res = await fetch("http://localhost:1337/api/home-pages?populate[team][populate]=*");
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[team][populate]=*");
   const data = await res.json();
   return data?.data?.[0]; // Extracting the first home page data
 }
@@ -48,7 +48,7 @@ export default async function Team() {
                   {/* Conditionally render image */}
                   {teamMember.image ? (
                     <Image
-                      src={`http://localhost:1337${teamMember.image}`} // Prepending the base URL
+                      src={`https://cms-backend-kjsu.onrender.com${teamMember.image}`} // Prepending the base URL
                       alt={`${teamMember.name} Avatar`}
                       layout="fill"
                       objectFit="cover"

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
 async function getUserType1PageData() {
-  const res = await fetch("http://localhost:1337/api/user-type-1-pages?populate[hero][populate]=*", {
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate[hero][populate]=*", {
     cache: "no-store",
   });
 
@@ -33,7 +33,7 @@ export default async function Hero() {
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-400 md:h-80">
             {image && (
               <Image
-                src={`http://localhost:1337${image.url}`} // Change the domain to your backend's domain if needed
+                src={`https://cms-backend-kjsu.onrender.com${image.url}`} // Change the domain to your backend's domain if needed
                 alt={image.alternativeText || 'Image'}
                 height={500}
                 width={700}

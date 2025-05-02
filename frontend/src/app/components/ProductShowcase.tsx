@@ -14,13 +14,13 @@ export default function ProductShowcase() {
     const fetchComponent4 = async () => {
       try {
         const res = await fetch(
-          "http://localhost:1337/api/home-pages?populate[component_4][populate][0]=image"
+          "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_4][populate]=*"
         )
         if (!res.ok) {
           throw new Error(`HTTP Error: ${res.status}`)
         }
         const json = await res.json()
-        console.log("Full API Response:", json)
+        console.log("Full API RESPONSE:", json)
         const comp = json?.data?.[0]?.component_4?.[0]
         setComponent4(comp ?? null)
       } catch (e: any) {
@@ -54,7 +54,7 @@ export default function ProductShowcase() {
           <div className="h-80 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-96">
             {image && (
               <img
-                src={`http://localhost:1337${image.url}`}
+                src={`https://cms-backend-kjsu.onrender.com${image.url}`}
                 alt={image.alternativeText || "Feature image"}
                 className="h-full w-full object-cover"
               />

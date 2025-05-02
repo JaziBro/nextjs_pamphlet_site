@@ -20,7 +20,7 @@ export default function FileUploadSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:1337/api/user-type-2-pages?populate[hero][populate]=hero_image")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[hero][populate]=hero_image")
         const json = await res.json()
 
         const hero = json?.data?.[0]?.hero?.[0]
@@ -31,7 +31,7 @@ export default function FileUploadSection() {
             hero_title: hero.hero_title,
             hero_subtitle: hero.hero_subtitle,
             hero_button: hero.hero_button,
-            imageUrl: imageUrl ? `http://localhost:1337${imageUrl}` : undefined,
+            imageUrl: imageUrl ? `https://cms-backend-kjsu.onrender.com${imageUrl}` : undefined,
           })
         }
       } catch (error) {

@@ -10,7 +10,7 @@ export default function ReversedStepsSection() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:1337/api/user-type-2-pages?populate[component_1][populate]=image")
+        const response = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_1][populate]=image")
         const result = await response.json()
         console.log("Fetched component_4 data:", result.data[0].component_1[0])
 
@@ -30,7 +30,7 @@ export default function ReversedStepsSection() {
   }
 
   const imageUrl = data.image?.[0]?.url
-    ? `http://localhost:1337${data.image[0].url}`
+    ? `https://cms-backend-kjsu.onrender.com${data.image[0].url}`
     : null
 
   return (

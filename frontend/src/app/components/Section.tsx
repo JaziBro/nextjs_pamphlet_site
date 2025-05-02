@@ -13,7 +13,7 @@ export default function ContactSection() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("http://localhost:1337/api/home-pages?populate[component_3][populate]=*")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_3][populate]=*")
         const json = await res.json()
         console.log("Full API Response:", json) // Log the entire response
 
@@ -98,7 +98,7 @@ export default function ContactSection() {
           <div className="relative h-96 w-full overflow-hidden rounded-lg">
             {imageUrl ? (
               <Image
-                src={`http://localhost:1337${imageUrl}`}
+                src={`https://cms-backend-kjsu.onrender.com${imageUrl}`}
                 alt="Feature visual"
                 fill
                 className="object-cover"

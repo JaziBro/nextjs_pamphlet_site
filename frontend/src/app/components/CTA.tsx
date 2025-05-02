@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 async function getHomePageData() {
-  const res = await fetch("http://localhost:1337/api/home-pages?populate[component_6][populate]=*");
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_6][populate]=*");
   const data = await res.json();
   return data.data?.[0];
 }
@@ -12,7 +12,7 @@ export default async function CTA() {
   const image = component?.image?.[0];
   
   // If no image exists, fallback to a default image
-  const imageUrl = image ? `http://localhost:1337${image.url}` : "/images/default-image.jpg";
+  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : "/images/default-image.jpg";
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">

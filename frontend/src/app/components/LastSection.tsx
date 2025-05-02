@@ -22,7 +22,7 @@ export default function LastSection() {
   useEffect(() => {
     async function fetchComponent7() {
       try {
-        const res = await fetch("http://localhost:1337/api/home-pages?populate[component_7][populate]=*")
+        const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_7][populate]=*")
         const json = await res.json()
 
         const componentData = json.data?.[0]?.component_7?.[0]
@@ -41,7 +41,7 @@ export default function LastSection() {
   }
 
   const imageUrl = component7.image?.[0]?.url
-    ? `http://localhost:1337${component7.image[0].url}`
+    ? `https://cms-backend-kjsu.onrender.com${component7.image[0].url}`
     : null
 
   return (

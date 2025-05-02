@@ -12,7 +12,7 @@ export default function Services() {
     const fetchComponent5 = async () => {
       try {
         const res = await fetch(
-          "http://localhost:1337/api/home-pages?populate[component_5][populate]=*"
+          "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_5][populate]=*"
         )
         if (!res.ok) {
           throw new Error(`HTTP Error: ${res.status}`)

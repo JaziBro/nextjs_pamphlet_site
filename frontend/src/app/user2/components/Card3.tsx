@@ -9,7 +9,7 @@ export default function Card() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "http://localhost:1337/api/user-type-2-pages?populate[component_4][populate]=image"
+          "https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_4][populate]=image"
         )
         const result = await res.json()
         console.log("Fetched component_4 data:", result.data[0].component_4[0])
@@ -25,7 +25,7 @@ export default function Card() {
   }, [])
 
   const imageUrl = data?.image?.[0]?.url
-    ? `http://localhost:1337${data.image[0].url}`
+    ? `https://cms-backend-kjsu.onrender.com${data.image[0].url}`
     : null
 
   return (

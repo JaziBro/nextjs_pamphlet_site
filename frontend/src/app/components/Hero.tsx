@@ -9,10 +9,12 @@ async function getHomePageData() {
 
 export default async function Hero() {
   const data = await getHomePageData();
-  console.log("Fetched data:", data);
+  console.log("FETCHED HERO DATA:", data);
   const hero = data.hero?.[0];
   const image = hero?.hero_image?.[0];
-  console.log("THE IMAGE", image);
+  const imageUrl = `https://cms-backend-kjsu.onrender.com${image.url}`;
+  console.log("Image URL:", imageUrl);
+
 
   return (
     <section className="w-full py-16 md:py-24 mt-15">

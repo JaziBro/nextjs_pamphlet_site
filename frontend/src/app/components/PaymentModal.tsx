@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {ChevronDown,ChevronRight,Gift,Info,Minus,Plus} from "lucide-react"
@@ -11,6 +11,7 @@ import { createCryptoInvoice } from "../paymentGateway/nowpayments"
 import { createStripe } from "../paymentGateway/stripe"
 import { createTransak } from "../paymentGateway/transak"
 import { getGooglePayConfig, loadGooglePay } from "../paymentGateway/googlepay";
+
 
 
 
@@ -39,6 +40,8 @@ export default function PaymentModal() {
     setAmount(quantity * BASE_PRICE)
   }, [quantity])
 
+  const applePayRef = useRef<HTMLButtonElement>(null) // 🍎 Ref for Apple Pay button
+
   // Grab MetaMask address for Transak
   useEffect(() => {
     if (window.ethereum) {
@@ -53,7 +56,7 @@ export default function PaymentModal() {
   const decrementQuantity = () => setQuantity(q => Math.max(1, q - 1))
 
   const selectGateway = async (
-    gateway: "transak" | "stripe" | "nowpayments" | "coinbase" | "googlepay"
+    gateway: "transak" | "stripe" | "nowpayments" | "coinbase" | "googlepay" | "applepay"
   ) => {
     setShowPayOptions(false)
   
@@ -82,6 +85,7 @@ export default function PaymentModal() {
       // Dummy placeholder – replace with actual Google Pay setup if needed
       setPaymentGateway({ method: "googlepay" })
     }
+    
   }
   
 
@@ -137,7 +141,6 @@ export default function PaymentModal() {
       }
     }
     
-  
     // Fallback (should never hit)
     alert(`Would launch ${paymentName} here for \$${amount}`)
   }

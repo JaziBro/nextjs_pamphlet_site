@@ -1,8 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 export default function ReversedStepsSection() {
   const [data, setData] = useState<any>(null)

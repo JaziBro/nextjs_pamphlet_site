@@ -1,8 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 export default function Card() {
   const [currentSlide, setCurrentSlide] = useState(0)

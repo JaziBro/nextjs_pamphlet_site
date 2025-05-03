@@ -1,9 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
 
 interface UserType2Data {
   hero_title: string

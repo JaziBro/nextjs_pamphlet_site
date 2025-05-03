@@ -2,7 +2,6 @@ import CTA from "./components/CTA";
 import Features from "./components/Features";
 import Hero from "./components/Hero";
 import LastSection from "./components/LastSection";
-import NavBar from "./components/NavBar";
 import ProductShowcase from "./components/ProductShowcase";
 import Section from "./components/Section";
 import Services from "./components/Services";

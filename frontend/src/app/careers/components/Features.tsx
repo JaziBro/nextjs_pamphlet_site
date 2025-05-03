@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 
 export default function Features() {
   return (
@@ -20,7 +19,7 @@ export default function Features() {
             <h2 className="text-2xl font-bold">Life at Lyft</h2>
             <p className="text-gray-300 text-base">
               Lyft culture revolves around our core values. We have superb benefits and great perks (and some pretty
-              cute office dogs). Across our over 45 locations, we've got fabulous programs to connect, grow, and
+              cute office dogs). Across our over 45 locations, we&apos;ve got fabulous programs to connect, grow, and
               celebrate.
             </p>
             <Link href="#" className="text-purple-400 hover:text-purple-300 inline-block font-medium">
@@ -33,7 +32,7 @@ export default function Features() {
             <h2 className="text-2xl font-bold">Early Talent Programs</h2>
             <p className="text-gray-300 text-base">
               Working at Lyft as an intern, new graduate, or apprentice is a great start to your career. With plenty of
-              mentor support, you'll make an impact with valuable projects. Plus, you'll love how friendly and welcoming
+              mentor support, you&apos;ll make an impact with valuable projects. Plus, you&apos;ll love how friendly and welcoming
               Lyft culture is.
             </p>
             <Link href="#" className="text-purple-400 hover:text-purple-300 inline-block font-medium">

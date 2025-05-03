@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
 export default function Hero() {
@@ -13,7 +12,7 @@ export default function Hero() {
               Building a more connected world, ride by ride.
             </h1>
             <p className="text-gray-300 text-md max-w-md">
-              Whether it's an everyday commute or a journey that changes everything, we are driven by our purpose: to
+              Whether it&apos;s an everyday commute or a journey that changes everything, we are driven by our purpose: to
               serve and connect.
             </p>
             <Button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-4 rounded-full text-md h-auto">

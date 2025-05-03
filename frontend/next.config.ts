@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: 'cms-backend-kjsu.onrender.com',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
   },
 };

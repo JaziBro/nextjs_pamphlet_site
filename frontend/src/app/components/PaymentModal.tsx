@@ -1,200 +1,265 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { FaEthereum, FaCreditCard } from "react-icons/fa6";
-import { Gift } from "lucide-react";
-import { createTransak } from "../paymentGateway/transak";
-import { createStripe } from "../paymentGateway/stripe";
-import { createCryptoInvoice } from "../paymentGateway/nowpayments"; // Import the NOWPayments function
+import { useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {ChevronDown,ChevronRight,Gift,Info,Minus,Plus} from "lucide-react"
+import { FaEthereum, FaCreditCard } from "react-icons/fa";
+import Image from "next/image"
+import createCoinbaseCharge from "../paymentGateway/coinbase"
+import { createCryptoInvoice } from "../paymentGateway/nowpayments"
+import { createStripe } from "../paymentGateway/stripe"
+import { createTransak } from "../paymentGateway/transak"
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x.src,
-  iconUrl: markerIcon.src,
-  shadowUrl: markerShadow.src,
-});
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: any; // Add this to prevent TypeScript errors
   }
 }
 
-export default function GiftShop() {
-  const [count, setCount] = useState<number>(1);
-  const [walletAddress, setWalletAddress] = useState<string>("");
-  const [paymentGateway, setPaymentGateway] = useState<any>(null);
-  const [paymentName, setPaymentName] = useState<string>("Crypto Pay (via Transak)");
-  const [showOptions, setShowOptions] = useState<boolean>(false);
+export default function PaymentModal() {
+  const BASE_PRICE = 10
+  const [quantity, setQuantity] = useState(1)
+  const [amount, setAmount] = useState(BASE_PRICE)
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [countryCode, setCountryCode] = useState("+92")
 
+  // Integration state:
+  const [walletAddress, setWalletAddress] = useState<string>("")
+  const [paymentName, setPaymentName] = useState<string>("Google Pay")
+  const [paymentGateway, setPaymentGateway] = useState<any>(null)
+  const [showPayOptions, setShowPayOptions] = useState<boolean>(false)
+
+  // Update amount whenever quantity changes
   useEffect(() => {
-    async function getWalletAddress() {
-      if (typeof window.ethereum !== "undefined") {
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        setWalletAddress(accounts[0]);
-      } else {
-        alert("MetaMask not detected");
-      }
-    }
+    setAmount(quantity * BASE_PRICE)
+  }, [quantity])
 
-    getWalletAddress();
-  }, []);
-
+  // Grab MetaMask address for Transak
   useEffect(() => {
-    if (walletAddress && paymentName.includes("Crypto")) {
-      const transakInstance = createTransak(walletAddress);
-      setPaymentGateway(transakInstance);
+    if (window.ethereum) {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((accounts: string[]) => setWalletAddress(accounts[0]))
+        .catch(() => {})
     }
-  }, [walletAddress]);
+  }, [])
+
+  const incrementQuantity = () => setQuantity(q => q + 1)
+  const decrementQuantity = () => setQuantity(q => Math.max(1, q - 1))
+
+  const selectGateway = async (gateway: "transak" | "stripe" | "nowpayments" | "coinbase") => {
+    setShowPayOptions(false)
+
+    if (gateway === "transak") {
+      setPaymentName("Transak")
+      const t = createTransak(walletAddress)
+      setPaymentGateway(t)
+    }
+    if (gateway === "stripe") {
+      setPaymentName("Card (Stripe)")
+      const s = await createStripe()
+      setPaymentGateway(s)
+    }
+    if (gateway === "nowpayments") {
+      setPaymentName("NowPayments")
+      const url = await createCryptoInvoice(amount)
+      setPaymentGateway(url)
+    }
+    if (gateway === "coinbase") {
+      setPaymentName("Coinbase");
+      const url = await createCoinbaseCharge(); // ⬅️ removed amount and currency
+      setPaymentGateway(url);
+    }
+    
+  }
 
   const handlePayment = async () => {
-    if (!paymentGateway) {
-      alert("Payment gateway not ready yet!");
-      return;
+    // Crypto flows:
+    if (paymentName === "Transak") {
+      paymentGateway?.init()
+      return
     }
-  
-    if (paymentName.includes("Crypto")) {
-      if (paymentName.includes("NOWPayments")) {
-        // For NOWPayments, redirect the user to the invoice URL
-        window.location.href = paymentGateway; // `paymentGateway` here is the invoice URL returned by NOWPayments API
-      } else {
-        // Handle other crypto gateways (e.g., Transak) that have an `init` method
-        paymentGateway.init();
-      }
-    } else if (paymentName.includes("Stripe")) {
-      // Handle Stripe payment
-      const stripe = await paymentGateway; // Assuming paymentGateway is a Stripe object
+    if (paymentName === "NowPayments") {
+      window.location.href = paymentGateway
+      return
+    }
+    if (paymentName === "Coinbase") {
+      window.location.href = paymentGateway
+      return
+    }
+
+    // Stripe flow:
+    if (paymentName === "Card (Stripe)") {
+      const stripe = await paymentGateway
       const { error } = await stripe.redirectToCheckout({
-        lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity: count }],
+        lineItems: [{ price: "price_1RIxgXRxwT7BLSjxopDAGLAT", quantity }],
         mode: "payment",
         successUrl: window.location.origin + "/success",
         cancelUrl: window.location.origin + "/cancel",
-      });
-      if (error) console.error(error.message);
-    } else if (paymentName.includes("Paddle")) {
-      // Handle Paddle payment
-      if (paymentGateway?.Checkout?.open) {
-        paymentGateway.Checkout.open({
-          override: true,
-          product: "price_1RIxgXRxwT7BLSjxopDAGLAT", // Dynamically inject priceId if needed
-          successCallback: () => console.log("Paddle payment successful"),
-          closeCallback: () => console.log("Paddle checkout closed"),
-        });
-      } else {
-        console.error("Paddle checkout not available");
-      }
+      })
+      if (error) console.error(error.message)
+      return
     }
-  };
-  
 
-  const handleChangePayment = () => {
-    setShowOptions(true);
-  };
-
-  const selectGateway = async (gateway: "transak" | "stripe" | "paddle" | "nowpayments") => {
-    if (gateway === "transak") {
-      const transakInstance = createTransak(walletAddress);
-      setPaymentGateway(transakInstance);
-      setPaymentName("Crypto Pay (via Transak)");
-    } else if (gateway === "stripe") {
-      const stripeInstance = await createStripe();
-      setPaymentGateway(stripeInstance);
-      setPaymentName("Card Payment (via Stripe)");
-    } else if (gateway === "nowpayments") {
-      const nowPaymentsInstance = await createCryptoInvoice(10); // Replace 10 with your actual amount
-      setPaymentGateway(nowPaymentsInstance);
-      setPaymentName("Crypto Pay (via NOWPayments)");
-    } 
-    setShowOptions(false);
-  };
-  
+    // Fallback: Google Pay (or unimplemented)
+    alert(`Would launch ${paymentName} here for \$${amount}`)
+  }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12 mt-20">
-      <div className="text-center mb-10">
-        <Gift className="w-16 h-16 mx-auto mb-4" />
-        <h1 className="text-3xl font-bold">The Gift Shop</h1>
-        <p className="text-gray-300 mt-2 max-w-md mx-auto">
-          Get that hardworking man the best gift, a night out with his future forever buddy!
-        </p>
-      </div>
-
-      <div className="w-full max-w-md mb-6">
-        <label className="text-sm text-gray-400">Phone Number</label>
-        <div className="flex items-center mt-1 border border-pink-500 rounded-full overflow-hidden shadow-md">
-          <span className="bg-pink-700 px-4 py-2">+92</span>
-          <input
-            type="text"
-            placeholder="Phone number"
-            className="flex-1 bg-transparent px-4 py-2 text-white focus:outline-none"
-          />
-          <button className="px-4 text-pink-400 hover:text-pink-200">📞</button>
+    <div className="flex items-center justify-center min-h-screen bg-gray-950 p-4">
+      <div className="w-full max-w-3xl bg-gray-900 rounded-lg p-8 space-y-8">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center space-y-4">
+          <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center">
+            <Gift className="w-10 h-10 text-gray-400" />
+          </div>
+          <h2 className="text-3xl font-bold text-white">The Gift Shop</h2>
+          <p className="text-gray-300 text-base max-w-lg">
+            Get that hardworking man the best gift, a night out with his future forever buddy!
+          </p>
         </div>
-      </div>
 
-      <div className="flex flex-col md:flex-row gap-6 w-full max-w-4xl">
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="bg-[#1c1c1e]/80 backdrop-blur-lg rounded-2xl p-6 shadow-lg">
-            <p className="text-gray-400 text-center">Pay Using</p>
-            <div className="flex justify-between items-center bg-zinc-800 px-4 py-3 rounded-xl mt-2">
-              <div className="flex items-center gap-3">
-                {paymentName.includes("Crypto") ? (
-                  <FaEthereum width={24} height={24} />
-                ) : (
-                  <FaCreditCard width={24} height={24} />
-                )}
-                <span>{paymentName}</span>
-              </div>
-              <button className="text-pink-400 hover:underline" onClick={handleChangePayment}>
-                Change ➤
+        {/* Phone Number Input */}
+        <div className="space-y-2 max-w-xl mx-auto">
+          <label htmlFor="phone" className="text-sm text-gray-400 flex items-center">
+            Phone Number <span className="ml-1 text-pink-500">*</span>
+          </label>
+          <div className="flex">
+            <div className="relative">
+              <button
+                className="h-12 px-4 flex items-center gap-2 rounded-l-md border border-gray-700 bg-gray-800 text-white"
+                onClick={() => {}}
+              >
+                {countryCode} <ChevronDown className="h-4 w-4 text-gray-400" />
               </button>
             </div>
-            {showOptions && (
-              <div className="mt-4 space-y-2">
-                <button onClick={() => selectGateway("transak")} className="text-left w-full hover:underline text-sm">
-                  🔹 Crypto (via Transak)
-                </button>
-                <button onClick={() => selectGateway("stripe")} className="text-left w-full hover:underline text-sm">
-                  💳 Card (via Stripe)
-                </button>
-                <button onClick={() => selectGateway("nowpayments")} className="text-left w-full hover:underline text-sm">
-                  🔹 Crypto (via NOWPayments)
-                </button>
-                <button onClick={() => selectGateway("paddle")} className="text-left w-full hover:underline text-sm">
-                  💳 Card (via Paddle)
+            <div className="relative flex-grow">
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="Phone number"
+                className="h-12 rounded-l-none border-gray-700 bg-gray-800 text-white text-base"
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+              />
+            </div>
+          </div>
+          <p className="text-xs text-pink-500">Required</p>
+        </div>
+
+        {/* Payment Method & Amount */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Method */}
+          <div className="space-y-2">
+            <p className="text-sm text-gray-400 mb-2">Pay Using</p>
+            <div className="bg-gray-800 rounded-md p-5 h-full">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    {paymentName.includes("Card") ? (
+                      <FaCreditCard className="text-gray-900" />
+                    ) : (
+                      <FaEthereum className="text-gray-900" />
+                    )}
+                  </div>
+                  <span className="text-white text-lg">{paymentName}</span>
+                </div>
+                <button
+                  className="text-pink-500 flex items-center text-base"
+                  onClick={() => setShowPayOptions(true)}
+                >
+                  Change <ChevronRight className="h-5 w-5 ml-2" />
                 </button>
               </div>
-            )}
-            <button
-              onClick={handlePayment}
-              className="mt-6 w-full bg-pink-600 hover:bg-pink-700 transition-colors py-2 rounded-full"
-            >
-              Pay Now
-            </button>
+              {/* Options dropdown */}
+              {showPayOptions && (
+                <div className="mt-4 space-y-2">
+                  <button
+                    onClick={() => selectGateway("transak")}
+                    className="text-left w-full hover:underline text-sm text-white"
+                  >
+                    🔹 Transak
+                  </button>
+                  <button
+                    onClick={() => selectGateway("nowpayments")}
+                    className="text-left w-full hover:underline text-sm text-white"
+                  >
+                    🔹 NowPayments
+                  </button>
+                  <button
+                    onClick={() => selectGateway("stripe")}
+                    className="text-left w-full hover:underline text-sm text-white"
+                  >
+                    💳 Stripe
+                  </button>
+                  <button
+                    onClick={() => selectGateway("coinbase")}
+                    className="text-left w-full hover:underline text-sm text-white"
+                  >
+                    🏦 Coinbase
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Amount */}
+          <div className="bg-gray-800 rounded-md p-5">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center">
+                <Info className="h-6 w-6 text-gray-400 mr-3" />
+                <span className="text-pink-500 text-2xl font-bold">${amount}</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={decrementQuantity}
+                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white"
+                >
+                  <Minus className="h-5 w-5" />
+                </button>
+                <span className="text-white text-xl">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-white"
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-pink-500 to-purple-500"
+                style={{ width: `${(quantity / 10) * 100}%` }}
+              ></div>
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 h-[300px] rounded-2xl overflow-hidden shadow-lg border-2 border-pink-600">
-          <MapContainer center={[33.6844, 73.0479]} zoom={12} style={{ height: "100%", width: "100%" }}>
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        {/* Map */}
+        <div className="bg-gray-800 rounded-md p-5">
+          <p className="text-sm text-gray-400 mb-3">The places you could go...</p>
+          <div className="relative h-48 bg-gray-700 rounded-md overflow-hidden">
+            <Image
+              src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?q=80&w=1000&auto=format&fit=crop"
+              alt="map"
+              fill
+              className="object-cover rounded-md"
             />
-            <Marker position={[33.6844, 73.0479]}>
-              <Popup>Your gift will be dispatched from here 🎁</Popup>
-            </Marker>
-          </MapContainer>
+          </div>
+        </div>
+
+        {/* Action */}
+        <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
+          <Button variant="outline" className="h-12">
+            Cancel
+          </Button>
+          <Button onClick={handlePayment} className="h-12">
+            Pay ${amount}
+          </Button>
         </div>
       </div>
     </div>
-  );
+  )
 }

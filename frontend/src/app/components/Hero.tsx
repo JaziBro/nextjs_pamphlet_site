@@ -4,7 +4,7 @@ import Image from "next/image";
 async function getHomePageData() {
   const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[hero][populate]=*");
   const data = await res.json();
-  return data.data?.[0];
+  return data.data?.[0].attributes;
 }
 
 export default async function Hero() {

@@ -10,6 +10,9 @@ import createCoinbaseCharge from "../paymentGateway/coinbase"
 import { createCryptoInvoice } from "../paymentGateway/nowpayments"
 import { createStripe } from "../paymentGateway/stripe"
 import { createTransak } from "../paymentGateway/transak"
+import { getGooglePayConfig, loadGooglePay } from "../paymentGateway/googlepay";
+
+
 
 
 declare global {
@@ -27,7 +30,7 @@ export default function PaymentModal() {
 
   // Integration state:
   const [walletAddress, setWalletAddress] = useState<string>("")
-  const [paymentName, setPaymentName] = useState<string>("Google Pay")
+  const [paymentName, setPaymentName] = useState<string>("Select Payment Method")
   const [paymentGateway, setPaymentGateway] = useState<any>(null)
   const [showPayOptions, setShowPayOptions] = useState<boolean>(false)
 
@@ -49,9 +52,11 @@ export default function PaymentModal() {
   const incrementQuantity = () => setQuantity(q => q + 1)
   const decrementQuantity = () => setQuantity(q => Math.max(1, q - 1))
 
-  const selectGateway = async (gateway: "transak" | "stripe" | "nowpayments" | "coinbase") => {
+  const selectGateway = async (
+    gateway: "transak" | "stripe" | "nowpayments" | "coinbase" | "googlepay"
+  ) => {
     setShowPayOptions(false)
-
+  
     if (gateway === "transak") {
       setPaymentName("Transak")
       const t = createTransak(walletAddress)
@@ -68,15 +73,19 @@ export default function PaymentModal() {
       setPaymentGateway(url)
     }
     if (gateway === "coinbase") {
-      setPaymentName("Coinbase");
-      const url = await createCoinbaseCharge(); // ⬅️ removed amount and currency
-      setPaymentGateway(url);
+      setPaymentName("Coinbase")
+      const url = await createCoinbaseCharge()
+      setPaymentGateway(url)
     }
-    
+    if (gateway === "googlepay") {
+      setPaymentName("Google Pay")
+      // Dummy placeholder – replace with actual Google Pay setup if needed
+      setPaymentGateway({ method: "googlepay" })
+    }
   }
+  
 
   const handlePayment = async () => {
-    // Crypto flows:
     if (paymentName === "Transak") {
       paymentGateway?.init()
       return
@@ -89,8 +98,7 @@ export default function PaymentModal() {
       window.location.href = paymentGateway
       return
     }
-
-    // Stripe flow:
+  
     if (paymentName === "Card (Stripe)") {
       const stripe = await paymentGateway
       const { error } = await stripe.redirectToCheckout({
@@ -102,8 +110,35 @@ export default function PaymentModal() {
       if (error) console.error(error.message)
       return
     }
-
-    // Fallback: Google Pay (or unimplemented)
+  
+    else if (paymentName === "Google Pay") {
+      try {
+        await loadGooglePay(); // Load Google Pay script
+        const paymentsClient = new window.google.payments.api.PaymentsClient({
+          environment: "TEST",
+        });
+    
+        const config = getGooglePayConfig(amount.toFixed(2));
+        const isReady = await paymentsClient.isReadyToPay(config);
+    
+        if (isReady.result) {
+          const paymentDataRequest = config;
+          const paymentData = await paymentsClient.loadPaymentData(paymentDataRequest);
+    
+          console.log("Payment Success", paymentData);
+          alert("Payment successful via Google Pay!");
+          // TODO: Send token to backend or process the payment further
+        } else {
+          alert("Google Pay is not available.");
+        }
+      } catch (error) {
+        console.error("Google Pay Error", error);
+        alert("Google Pay failed to load or process.");
+      }
+    }
+    
+  
+    // Fallback (should never hit)
     alert(`Would launch ${paymentName} here for \$${amount}`)
   }
 
@@ -200,6 +235,12 @@ export default function PaymentModal() {
                   >
                     🏦 Coinbase
                   </button>
+                  <button
+                    onClick={() => selectGateway("googlepay")}
+                    className="text-left w-full hover:underline text-sm text-white"
+                  >
+                    💰 Google Pay
+                  </button>
                 </div>
               )}
             </div>
@@ -252,10 +293,10 @@ export default function PaymentModal() {
 
         {/* Action */}
         <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
-          <Button variant="outline" className="h-12">
+          <Button variant="outline" className="h-12 cursor-pointer">
             Cancel
           </Button>
-          <Button onClick={handlePayment} className="h-12">
+          <Button onClick={handlePayment} className="h-12 cursor-pointer">
             Pay ${amount}
           </Button>
         </div>

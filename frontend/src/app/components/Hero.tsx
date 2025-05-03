@@ -12,6 +12,7 @@ export default async function Hero() {
   console.log("Fetched data:", data);
   const hero = data.hero?.[0];
   const image = hero?.hero_image?.[0];
+  console.log("THE IMAGE", image);
 
   return (
     <section className="w-full py-16 md:py-24 mt-15">

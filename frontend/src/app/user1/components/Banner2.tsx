@@ -20,12 +20,12 @@ export default function ToggleSection() {
         const json = await res.json()
 
         const comp3 = json.data?.[0]?.component_3?.[0]
-        console.log("component_3 is:", comp3)
+        // console.log("component_3 is:", comp3)
         if (!comp3) {
           console.warn("component_3 is still MIA 😩")
-          console.log("data[0] is:", json.data?.[0])
+          // console.log("data[0] is:", json.data?.[0])
         } else {
-          console.log("🔥 component_3 FOUND 🎉", comp3)
+          // console.log("🔥 component_3 FOUND 🎉", comp3)
           setData(comp3)
         }
       } catch (err) {

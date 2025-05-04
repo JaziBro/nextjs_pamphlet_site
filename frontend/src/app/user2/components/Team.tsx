@@ -18,7 +18,7 @@ export default function Team() {
           'https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[team][populate]=*'
         )
         const result = await res.json()
-        console.log('Fetched team raw:', result)
+        // console.log('Fetched team raw:', result)
 
         const teamObj = result.data?.[0]?.team?.[0]
 

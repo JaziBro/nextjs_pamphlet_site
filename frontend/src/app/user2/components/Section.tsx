@@ -10,7 +10,7 @@ export default function ReversedStepsSection() {
       try {
         const response = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_1][populate]=image")
         const result = await response.json()
-        console.log("Fetched component_4 data:", result.data[0].component_1[0])
+        // console.log("Fetched component_4 data:", result.data[0].component_1[0])
 
         if (result.data && result.data[0].component_1) {
           setData(result.data[0].component_1[0])

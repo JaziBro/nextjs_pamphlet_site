@@ -20,9 +20,9 @@ export default function Services() {
         const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-1-pages?populate=*")
         const json = await res.json()
 
-        console.log("📦 Full response for debugging:", json)
+        // console.log("📦 Full response for debugging:", json)
         const comp4 = json.data?.[0]?.component_4?.[0] // ✅ This is correct
-        console.log("✅ component_4 fetched:", comp4)
+        // console.log("✅ component_4 fetched:", comp4)
 
         setData(comp4)
       } catch (err) {

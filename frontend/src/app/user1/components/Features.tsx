@@ -26,7 +26,7 @@ export default function Features() {
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
   
         const json = await res.json();
-        console.log("Raw response from Strapi:", json);
+        // console.log("Raw response from Strapi:", json);
   
         const component = json?.data?.[0]?.component_1?.[0];
   

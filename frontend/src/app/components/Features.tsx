@@ -1,24 +1,30 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import {Home, DollarSign, Clock, Banknote } from "lucide-react";
+import { Home, DollarSign, Clock, Banknote } from "lucide-react";
 
 async function getFeaturesData() {
-  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_1][populate]=*");
+  const res = await fetch(
+    "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_1][populate]=image",
+    {
+      cache: "no-store",
+    }
+  );  
   const data = await res.json();
-  console.log("Fetched data:", data);  // Log the fetched data for debugging
-  return data?.data?.[0]; // Return the first item from the data array
+  // console.log("Fetched data:", data);
+  return data?.data?.[0];
 }
+
 
 export default async function FeaturesSection() {
   const data = await getFeaturesData();
-  console.log("Fetched data for FeaturesSection:", data);
+  // console.log("Fetched data for FeaturesSection:", data);
 
   if (!data) {
     return <div>No data available</div>;
   }
 
-  const component1 = data?.component_1?.[0]; // Get the first item in component_1
-  const image = component1?.image?.[0]; // Get the image if available
+  const component1 = data?.component_1?.[0];
+  const image = component1?.image?.[0];
 
   return (
     <section className="py-12 px-4 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
@@ -28,7 +34,7 @@ export default async function FeaturesSection() {
         <div className="flex flex-col gap-4 mb-6 text-left text-gray-300">
           {component1?.feature_1 && (
             <div className="flex items-center space-x-2">
-              <Home className="text-xl" /> {/* FontAwesome Check Icon */}
+              <Home className="text-xl" />
               <p>{component1.feature_1}</p>
             </div>
           )}
@@ -68,7 +74,14 @@ export default async function FeaturesSection() {
 
       <div className="md:w-1/2">
         <div className="relative w-full h-80 rounded-md overflow-hidden">
-          {image && <Image src={`https://cms-backend-kjsu.onrender.com${image.url}`} alt="Component Image" layout="fill" objectFit="cover" />}
+          {image && (
+            <Image
+              src={`https://cms-backend-kjsu.onrender.com${image.url}`}
+              alt="Component Image"
+              layout="fill"
+              objectFit="cover"
+            />
+          )}
         </div>
       </div>
     </section>

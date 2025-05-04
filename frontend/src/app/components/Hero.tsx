@@ -4,24 +4,21 @@ import Image from "next/image";
 async function getHomePageData() {
   const res = await fetch("https://cms-backend-kjsu.onrender.com/api/home-pages?populate[hero][populate]=*");
   const data = await res.json();
-  return data.data?.[0].attributes;
+  return data.data?.[0];
 }
 
 export default async function Hero() {
   const data = await getHomePageData();
-  console.log("FETCHED HERO DATA:", data);
+  console.log("Fetched data:", data);
   const hero = data.hero?.[0];
   const image = hero?.hero_image?.[0];
-  const imageUrl = `https://cms-backend-kjsu.onrender.com${image.url}`;
-  console.log("Image URL:", imageUrl);
-
 
   return (
     <section className="w-full py-16 md:py-24 mt-15">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-400 md:h-80">
-            <Image src={`https://cms-backend-kjsu.onrender.com${image.url}`} alt="Hero img" height={500} width={700}/>
+            <Image src="https://images.unsplash.com/photo-1746264726380-cb3186610ef0?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Hero img" height={500} width={700}/>
           </div>
 
           <div className="flex flex-col">

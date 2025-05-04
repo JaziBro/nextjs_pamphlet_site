@@ -1,125 +1,85 @@
-"use client"
+import { Maximize2, Share2, MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
-import { useEffect, useState } from "react"
-import { Maximize2, Share2, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+async function getComponent4Data() {
+  const res = await fetch(
+    "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_4][populate]=*",
+    { cache: "no-store" }
+  );
+  if (!res.ok) throw new Error(`Failed to fetch Component 4 (${res.status})`);
+  const json = await res.json();
+  return json.data?.[0]?.component_4?.[0] || null;
+}
 
-export default function ProductShowcase() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [component4, setComponent4] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export default async function ProductShowcase() {
+  const component4 = await getComponent4Data();
 
-  useEffect(() => {
-    const fetchComponent4 = async () => {
-      try {
-        const res = await fetch(
-          "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_4][populate]=*"
-        )
-        if (!res.ok) {
-          throw new Error(`HTTP Error: ${res.status}`)
-        }
-        const json = await res.json()
-        console.log("Full API RESPONSE:", json)
-        const comp = json?.data?.[0]?.component_4?.[0]
-        setComponent4(comp ?? null)
-      } catch (e: any) {
-        console.error("Fetch error:", e)
-        setError(e.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchComponent4()
-  }, [])
+  if (!component4) {
+    return (
+      <section className="py-16 bg-zinc-900 text-center text-white">
+        <p>No component 4 data found.</p>
+      </section>
+    );
+  }
 
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
-  if (!component4) return <div>No component 4 data found.</div>
-
-  const image = component4.image?.[0]
-  const { title, feature_1, feature_2, feature_3, button_1 } = component4
-  const features = [feature_1, feature_2, feature_3]
-
-  const nextSlide = () =>
-    setCurrentSlide((prev) => (prev === features.length - 1 ? 0 : prev + 1))
-  const prevSlide = () =>
-    setCurrentSlide((prev) => (prev === 0 ? features.length - 1 : prev - 1))
+  const image = component4.image?.[0];
+  const imageUrl = image ? `https://images.unsplash.com/photo-1746264726380-cb3186610ef0?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D` : null; // Fallback to a default image if none is provided
+  console.log("Image URL:", imageUrl); // Debug image URL
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          {/* Left side - Image */}
-          <div className="h-80 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-96">
-            {image && (
-              <img
-                src={`https://cms-backend-kjsu.onrender.com${image.url}`}
-                alt={image.alternativeText || "Feature image"}
-                className="h-full w-full object-cover"
+          {/* Image */}
+          <div className="relative h-96 w-full overflow-hidden rounded-lg">
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt="Product image"
+                height={500}
+                width={700}
+                objectFit="cover" // Add object fit to control image scaling
               />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-white">
+                No image provided
+              </div>
             )}
           </div>
 
-          {/* Right side - Product features */}
+          {/* Features */}
           <div className="space-y-8">
-            {/* Heading */}
-            <div className="space-y-3">
-              <h2 className="text-white text-3xl">{title}</h2>
+            <h2 className="text-white text-3xl">{component4.title}</h2>
+            <div className="space-y-4">
+              {component4.feature_1 && (
+                <div className="flex items-center gap-3">
+                  <Maximize2 className="h-5 w-5 text-gray-400" />
+                  <span>{component4.feature_1}</span>
+                </div>
+              )}
+              {component4.feature_2 && (
+                <div className="flex items-center gap-3">
+                  <Share2 className="h-5 w-5 text-gray-400" />
+                  <span>{component4.feature_2}</span>
+                </div>
+              )}
+              {component4.feature_3 && (
+                <div className="flex items-center gap-3">
+                  <MessageSquare className="h-5 w-5 text-gray-400" />
+                  <span>{component4.feature_3}</span>
+                </div>
+              )}
+              {component4.feature_4 && (
+                <div className="flex items-center gap-3">
+                  <Maximize2 className="h-5 w-5 text-gray-400" />
+                  <span>{component4.feature_4}</span>
+                </div>
+              )}
             </div>
-
-            {/* Feature box */}
-            <div className="rounded-lg bg-zinc-800/50 p-6">
-              <div className="space-y-6">
-                {features.map((feat, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-800">
-                        {idx === 0 && <Maximize2 className="h-5 w-5 text-gray-400" />}
-                        {idx === 1 && <Share2 className="h-5 w-5 text-gray-400" />}
-                        {idx === 2 && <MessageSquare className="h-5 w-5 text-gray-400" />}
-                      </div>
-                      <span className="text-white">{feat}</span>
-                    </div>
-                    <div className="ml-11">
-                      <p className="mt-2 text-gray-300">{/* optional description */}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="flex justify-end">
-              <div className="flex items-center space-x-2">
-                <Button
-                  onClick={prevSlide}
-                  size="icon"
-                  variant="outline"
-                  className="h-8 w-8 rounded-full border-zinc-700 bg-transparent text-white hover:bg-zinc-800"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={nextSlide}
-                  size="icon"
-                  variant="outline"
-                  className="h-8 w-8 rounded-full border-zinc-700 bg-transparent text-white hover:bg-zinc-800"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            {/* CTA Button */}
-            {button_1 && (
-              <Button className="mt-4 rounded-full bg-zinc-800 text-white hover:bg-zinc-700">
-                {button_1}
-              </Button>
-            )}
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

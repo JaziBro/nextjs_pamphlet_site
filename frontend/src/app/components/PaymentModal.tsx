@@ -129,7 +129,7 @@ export default function PaymentModal() {
           const paymentDataRequest = config;
           const paymentData = await paymentsClient.loadPaymentData(paymentDataRequest);
     
-          console.log("Payment Success", paymentData);
+          // console.log("Payment Success", paymentData);
           alert("Payment successful via Google Pay!");
           // TODO: Send token to backend or process the payment further
         } else {

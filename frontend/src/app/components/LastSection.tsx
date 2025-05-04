@@ -27,7 +27,7 @@ export default function LastSection() {
 
         const componentData = json.data?.[0]?.component_7?.[0]
         setComponent7(componentData)
-        console.log("Fetched component_7 data:", componentData)
+        // console.log("Fetched component_7 data:", componentData)
       } catch (error) {
         console.error("Error fetching component_7:", error)
       }

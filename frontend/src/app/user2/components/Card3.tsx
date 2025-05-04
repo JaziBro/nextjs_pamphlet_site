@@ -12,7 +12,7 @@ export default function Card() {
           "https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_4][populate]=image"
         )
         const result = await res.json()
-        console.log("Fetched component_4 data:", result.data[0].component_4[0])
+        // console.log("Fetched component_4 data:", result.data[0].component_4[0])
         if (result.data && result.data[0].component_4) {
           setData(result.data[0].component_4[0])
         }

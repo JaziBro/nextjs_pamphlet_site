@@ -8,7 +8,7 @@ async function getHomePageData() {
 
 export default async function Team() {
   const data = await getHomePageData();
-  console.log("Fetched team data:", data);
+  // console.log("Fetched team data:", data);
 
   if (!data) {
     return <div>No data available</div>;
@@ -39,7 +39,7 @@ export default async function Team() {
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-3 md:gap-6">
           {team.map((teamMember, index) => {
-            console.log(`Rendering team member ${teamMember.name} with image:`, teamMember.image); // Log to verify URL
+            // console.log(`Rendering team member ${teamMember.name} with image:`, teamMember.image); // Log to verify URL
             return (
               <div key={index} className="flex flex-col items-center">
                 {/* Avatar circle */}

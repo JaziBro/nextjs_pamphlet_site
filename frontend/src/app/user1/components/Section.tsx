@@ -29,7 +29,7 @@ export default function Section() {
         const json = await res.json()
         const comp2 = json.data?.[0]?.component_2?.[0]
         setData(comp2)
-        console.log("✅ Fetched component_2:", comp2)
+        // console.log("✅ Fetched component_2:", comp2)
       } catch (err) {
         console.error("❌ Failed to fetch component_2:", err)
       }

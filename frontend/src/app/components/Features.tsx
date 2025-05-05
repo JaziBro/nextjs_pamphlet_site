@@ -4,7 +4,7 @@ import { Home, DollarSign, Clock, Banknote } from "lucide-react";
 
 async function getFeaturesData() {
   const res = await fetch(
-    "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_1][populate]=image",
+    "https://cms-backend-kjsu.onrender.com/api/home-pages?populate[component_1][populate]=*",
     {
       cache: "no-store",
     }
@@ -25,8 +25,6 @@ export default async function FeaturesSection() {
 
   const component1 = data?.component_1?.[0];
   const image = component1?.image?.[0];
-  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : null; // Fallback to a default image if none is provided
-  console.log("Image FEATURES:", imageUrl); // Debug image URL
 
   return (
     <section className="py-12 px-4 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
@@ -78,7 +76,7 @@ export default async function FeaturesSection() {
         <div className="relative w-full h-80 rounded-md overflow-hidden">
           {image && (
             <img
-              src={`https://cms-backend-kjsu.onrender.com${image.url}`}
+              src={image?.url}
               alt="Component Image"
             />
           )}

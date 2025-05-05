@@ -24,7 +24,7 @@ export default async function ProductShowcase() {
   }
 
   const image = component4.image?.[0];
-  const imageUrl = image ? `https://images.unsplash.com/photo-1746264726380-cb3186610ef0?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D` : null; // Fallback to a default image if none is provided
+  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : null; // Fallback to a default image if none is provided
   console.log("Image URL:", imageUrl); // Debug image URL
 
   return (
@@ -34,12 +34,11 @@ export default async function ProductShowcase() {
           {/* Image */}
           <div className="relative h-96 w-full overflow-hidden rounded-lg">
             {imageUrl ? (
-              <Image
+              <img
                 src={imageUrl}
                 alt="Product image"
                 height={500}
                 width={700}
-                objectFit="cover" // Add object fit to control image scaling
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-white">

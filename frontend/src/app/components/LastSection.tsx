@@ -73,10 +73,9 @@ export default function LastSection() {
           {/* Right side - Gradient image */}
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-80 relative">
             {imageUrl && (
-              <Image
+              <img
                 src={imageUrl}
                 alt="Component 7 image"
-                fill
                 className="object-cover"
               />
             )}

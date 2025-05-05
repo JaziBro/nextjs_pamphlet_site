@@ -20,7 +20,7 @@ export default async function CTA() {
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           {/* Left side - Image */}
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-500 md:h-80">
-            <Image src={imageUrl} alt="Image for CTA" height={500} width={700} />
+            <img src={imageUrl} alt="Image for CTA" height={500} width={700} />
           </div>
 
           {/* Right side - CTA content */}

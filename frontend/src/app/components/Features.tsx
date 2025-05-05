@@ -25,6 +25,8 @@ export default async function FeaturesSection() {
 
   const component1 = data?.component_1?.[0];
   const image = component1?.image?.[0];
+  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : null; // Fallback to a default image if none is provided
+  console.log("Image FEATURES:", imageUrl); // Debug image URL
 
   return (
     <section className="py-12 px-4 max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
@@ -75,11 +77,9 @@ export default async function FeaturesSection() {
       <div className="md:w-1/2">
         <div className="relative w-full h-80 rounded-md overflow-hidden">
           {image && (
-            <Image
+            <img
               src={`https://cms-backend-kjsu.onrender.com${image.url}`}
               alt="Component Image"
-              layout="fill"
-              objectFit="cover"
             />
           )}
         </div>

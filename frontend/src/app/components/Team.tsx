@@ -46,11 +46,9 @@ export default async function Team() {
                 <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400 relative">
                   {/* Conditionally render image */}
                   {teamMember.image ? (
-                    <Image
+                    <img
                       src={`https://cms-backend-kjsu.onrender.com${teamMember.image}`} // Prepending the base URL
                       alt={`${teamMember.name} Avatar`}
-                      layout="fill"
-                      objectFit="cover"
                       className="rounded-full"
                     />
                   ) : (

@@ -54,7 +54,7 @@ export default function Section() {
   }
 
   const image = data.image[0]
-  const imageUrl = new URL(image.url, "https://cms-backend-kjsu.onrender.com").href
+  const imageUrl = new URL(image.url).href
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">

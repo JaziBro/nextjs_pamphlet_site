@@ -24,7 +24,8 @@ export default async function Hero() {
   }
 
   const hero = data.hero[0];
-  const image = hero.hero_image?.[0];
+  const image = hero.hero_image;
+  console.log("📦 Hero data:", hero);
 
   return (
     <section className="w-full py-16 md:py-24 mt-15">
@@ -33,7 +34,7 @@ export default async function Hero() {
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-400 md:h-80">
             {image && (
               <Image
-                src={`https://cms-backend-kjsu.onrender.com${image.url}`} // Change the domain to your backend's domain if needed
+                src={image.url} // Change the domain to your backend's domain if needed
                 alt={image.alternativeText || 'Image'}
                 height={500}
                 width={700}

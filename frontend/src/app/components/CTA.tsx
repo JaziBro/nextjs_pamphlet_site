@@ -12,7 +12,7 @@ export default async function CTA() {
   const image = component?.image?.[0];
   
   // If no image exists, fallback to a default image
-  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : "/images/default-image.jpg";
+  const imageUrl = image ? image.url : "/images/default-image.jpg";
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">

@@ -2,34 +2,16 @@
 
 import { useEffect, useState } from "react"
 
-export default function ReversedStepsSection() {
-  const [data, setData] = useState<any>(null)
+async function getComponentData() {
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_1][populate]=*");
+  const data = await res.json();
+  return data.data?.[0]; // no attributes, so this is fine
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[component_1][populate]=image")
-        const result = await response.json()
-        // console.log("Fetched component_4 data:", result.data[0].component_1[0])
-
-        if (result.data && result.data[0].component_1) {
-          setData(result.data[0].component_1[0])
-        }
-      } catch (error) {
-        console.error("Failed to fetch component_4 data:", error)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  if (!data) {
-    return <div>Loading...</div>
-  }
-
-  const imageUrl = data.image?.[0]?.url
-    ? `https://cms-backend-kjsu.onrender.com${data.image[0].url}`
-    : null
+export default async function ReversedStepsSection() {
+  const data = await getComponentData();
+  const component_1 = data.component_1[0];
+  const image = component_1.image[0];  
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
@@ -69,15 +51,11 @@ export default function ReversedStepsSection() {
 
           {/* Right side - Image */}
           <div className="h-80 w-full overflow-hidden rounded-md bg-zinc-800 md:h-96 flex items-center justify-center">
-            {imageUrl ? (
               <img
-                src={imageUrl}
+                src={image.url}
                 alt="Component visual"
                 className="h-full w-full object-cover rounded-md"
               />
-            ) : (
-              <div className="text-white">No image available</div>
-            )}
           </div>
         </div>
       </div>

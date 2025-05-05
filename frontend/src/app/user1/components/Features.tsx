@@ -43,7 +43,7 @@ export default function Features() {
           // Prepend the base URL to the image URL
           const imageUrl = component.image?.[0]?.url;
           if (imageUrl) {
-            setImage(`https://cms-backend-kjsu.onrender.com${imageUrl}`); // Or replace localhost with your live URL
+            setImage(imageUrl); // Or replace localhost with your live URL
           } else {
             setImage(null);
           }

@@ -25,7 +25,7 @@ export default function Card() {
   }, [])
 
   const imageUrl = data?.image?.[0]?.url
-    ? `https://cms-backend-kjsu.onrender.com${data.image[0].url}`
+    ? data.image[0].url
     : null
 
   return (

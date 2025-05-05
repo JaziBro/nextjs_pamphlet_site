@@ -24,7 +24,7 @@ export default async function ProductShowcase() {
   }
 
   const image = component4.image?.[0];
-  const imageUrl = image ? `https://cms-backend-kjsu.onrender.com${image.url}` : null; // Fallback to a default image if none is provided
+  const imageUrl = image ? image.url : null; // Fallback to a default image if none is provided
   console.log("Image URL:", imageUrl); // Debug image URL
 
   return (

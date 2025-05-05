@@ -26,17 +26,17 @@ export default function Team() {
           {
             id: 1,
             title: teamObj?.team_1_title || 'Team Member 1',
-            image: teamObj?.team_1_image?.[0]?.url,
+            image: teamObj?.team_1_image?.url,
           },
           {
             id: 2,
             title: teamObj?.team_2_title || 'Team Member 2',
-            image: teamObj?.team_2_image?.[0]?.url,
+            image: teamObj?.team_2_image?.url,
           },
           {
             id: 3,
             title: teamObj?.team_3_title || 'Team Member 3',
-            image: teamObj?.team_3_image?.[0]?.url,
+            image: teamObj?.team_3_image?.url,
           },
         ]
 

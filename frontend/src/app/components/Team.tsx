@@ -8,8 +8,8 @@ async function getHomePageData() {
 
 export default async function Team() {
   const data = await getHomePageData();
-  // console.log("Fetched team data:", data);
-
+  console.log("Fetched data for Team:", data); // Log the fetched data
+  
   if (!data) {
     return <div>No data available</div>;
   }
@@ -34,6 +34,8 @@ export default async function Team() {
     },
   ];
 
+  console.log("Team data:", team); // Log the team data to verify structure
+
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -47,7 +49,7 @@ export default async function Team() {
                   {/* Conditionally render image */}
                   {teamMember.image ? (
                     <img
-                      src={`https://cms-backend-kjsu.onrender.com${teamMember.image}`} // Prepending the base URL
+                      src={teamMember.image} // Prepending the base URL
                       alt={`${teamMember.name} Avatar`}
                       className="rounded-full"
                     />

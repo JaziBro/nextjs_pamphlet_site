@@ -41,7 +41,7 @@ export default function LastSection() {
   }
 
   const imageUrl = component7.image?.[0]?.url
-    ? `https://cms-backend-kjsu.onrender.com${component7.image[0].url}`
+    ? component7.image[0].url
     : null
 
   return (

@@ -92,7 +92,7 @@ export default async function ContactSection() {
           <div className="relative h-96 w-full overflow-hidden rounded-lg">
             {image ? (
               <img
-                src={`https://cms-backend-kjsu.onrender.com${image.url}`}
+                src={image.url}
                 alt={image.alternativeText || "Feature visual"}
                 className="object-cover"
               />

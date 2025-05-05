@@ -9,8 +9,8 @@ async function getHomePageData() {
 
 export default async function Hero() {
   const data = await getHomePageData();
-  const hero = data.hero?.[0];
-  const image = hero.hero_image?.[0];
+  const hero = data.hero[0];
+  const image = hero.hero_image;
 
   return (
     <section className="w-full py-16 md:py-24 mt-15">
@@ -18,7 +18,7 @@ export default async function Hero() {
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <div className="h-64 w-full overflow-hidden rounded-md bg-gradient-to-b from-white to-gray-400 md:h-80">
               <img
-                src="http://localhost:1337/admin/uploads/photo_1494783367193_149034c05e8f_52d75e9e84.avif"
+                src={image?.url}
                 alt={image?.name || "Hero image"}
                 height={500}
                 width={700}

@@ -10,6 +10,7 @@ async function getComponentData() {
 
 export default async function ReversedStepsSection() {
   const data = await getComponentData();
+  console.log("Component data:", data);
   const component_1 = data.component_1[0];
   const image = component_1.image[0];  
 

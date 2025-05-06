@@ -34,7 +34,7 @@ export default async function Team() {
     },
   ];
 
-  console.log("Team data:", team); // Log the team data to verify structure
+  // console.log("Team data:", team); // Log the team data to verify structure
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">

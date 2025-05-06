@@ -20,32 +20,32 @@ export default async function ReversedStepsSection() {
           {/* Left side - Steps content */}
           <div className="flex flex-col">
             {/* Title */}
-            <div className="text-white text-xl font-bold mb-4">{data.title}</div>
+            <div className="text-white text-xl font-bold mb-4">{component_1.title}</div>
 
             {/* Feature steps */}
             <div className="space-y-4 text-white">
               <div className="flex items-start gap-3">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-700 text-xs text-white">1</div>
-                <div>{data.feature_1}</div>
+                <div>{component_1.feature_1}</div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-700 text-xs text-white">2</div>
-                <div>{data.feature_2}</div>
+                <div>{component_1.feature_2}</div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-700 text-xs text-white">3</div>
-                <div>{data.feature_3}</div>
+                <div>{component_1.feature_3}</div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-700 text-xs text-white">4</div>
-                <div>{data.feature_4}</div>
+                <div>{component_1.feature_4}</div>
               </div>
             </div>
 
             {/* Buttons */}
             <div className="mt-6 flex space-x-4">
-              <button className="bg-white text-black px-4 py-2 rounded">{data.button_1}</button>
-              <button className="bg-zinc-700 text-white px-4 py-2 rounded">{data.button_2}</button>
+              <button className="bg-white text-black px-4 py-2 rounded">{component_1.button_1}</button>
+              <button className="bg-zinc-700 text-white px-4 py-2 rounded">{component_1.button_2}</button>
             </div>
           </div>
 

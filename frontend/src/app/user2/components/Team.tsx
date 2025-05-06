@@ -1,81 +1,74 @@
-'use client'
+import Image from "next/image";
 
-import { useEffect, useState } from 'react'
-
-type TeamMember = {
-  id: number
-  title: string
-  image?: string
+async function getHomePageData() {
+  const res = await fetch("https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[team][populate]=*");
+  const data = await res.json();
+  return data?.data?.[0]; // Extracting the first home page data
 }
 
-export default function Team() {
-  const [team, setTeam] = useState<TeamMember[]>([])
+export default async function Team() {
+  const data = await getHomePageData();
+  console.log("Fetched data for Team:", data); // Log the fetched data
+  
+  if (!data) {
+    return <div>No data available</div>;
+  }
 
-  useEffect(() => {
-    const fetchTeamData = async () => {
-      try {
-        const res = await fetch(
-          'https://cms-backend-kjsu.onrender.com/api/user-type-2-pages?populate[team][populate]=*'
-        )
-        const result = await res.json()
-        // console.log('Fetched team raw:', result)
+  // Accessing the team array and extracting team member data
+  const teamData = data?.team?.[0]; // First item in the array
+  const team = [
+    {
+      name: teamData?.team_1_title,
+      content: "Testimonial content or description goes here.",
+      image: teamData?.team_1_image?.[0]?.url, 
+    },
+    {
+      name: teamData?.team_2_title, 
+      content: "Testimonial content or description goes here.",
+      image: teamData?.team_2_image?.[0]?.url, 
+    },
+    {
+      name: teamData?.team_3_title,
+      content: "Testimonial content or description goes here.",
+      image: teamData?.team_3_image?.[0]?.url, 
+    },
+  ];
 
-        const teamObj = result.data?.[0]?.team?.[0]
-
-        const teamArray: TeamMember[] = [
-          {
-            id: 1,
-            title: teamObj?.team_1_title || 'Team Member 1',
-            image: teamObj?.team_1_image?.url,
-          },
-          {
-            id: 2,
-            title: teamObj?.team_2_title || 'Team Member 2',
-            image: teamObj?.team_2_image?.url,
-          },
-          {
-            id: 3,
-            title: teamObj?.team_3_title || 'Team Member 3',
-            image: teamObj?.team_3_image?.url,
-          },
-        ]
-
-        setTeam(teamArray)
-      } catch (err) {
-        console.error('Failed to fetch team data:', err)
-      }
-    }
-
-    fetchTeamData()
-  }, [])
+  // console.log("Team data:", team); // Log the team data to verify structure
 
   return (
     <section className="w-full bg-zinc-900 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-3 md:gap-6">
-          {team.map((member, index) => (
-            <div key={member.id} className="flex flex-col items-center">
-              {/* Avatar circle with image */}
-              <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400">
-                {member.image ? (
-                  <img
-                    src={`https://cms-backend-kjsu.onrender.com${member.image}`}
-                    alt={member.title}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="h-full w-full bg-gray-300" />
-                )}
+          {team.map((teamMember, index) => {
+            // console.log(`Rendering team member ${teamMember.name} with image:`, teamMember.image); // Log to verify URL
+            return (
+              <div key={index} className="flex flex-col items-center">
+                {/* Avatar circle */}
+                <div className="mb-6 h-24 w-24 overflow-hidden rounded-full bg-gradient-to-b from-white to-gray-400 relative">
+                  {/* Conditionally render image */}
+                  {teamMember.image ? (
+                    <img
+                      src={teamMember.image} // Prepending the base URL
+                      alt={`${teamMember.name} Avatar`}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div>No Image Available</div>
+                  )}
+                </div>
+
+                {/* Content card */}
+                <div className={`w-full rounded-md p-6 items-center ${index === 1 ? "h-64" : "h-48"}`}>
+                  <div className="space-y-4">
+                    <div className="h-4 rounded text-center text-white text-xl">{teamMember.name}</div>
+                  </div>
+                </div>
               </div>
-              {/* Name/title area */}
-              <div className="mt-4 flex flex-col items-center space-y-2">
-                <div className="text-white text-lg font-semibold">{member.title}</div>
-                <div className="text-gray-400 text-sm">Team Member</div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
-  )
+  );
 }

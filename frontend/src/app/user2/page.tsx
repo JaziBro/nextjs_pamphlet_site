@@ -7,7 +7,7 @@ import Section from "./components/Section";
 import Team from "./components/Team";
 
 
-export default function User1Page() {
+export default function User2Page() {
   return (
     <div>
       <Hero/>

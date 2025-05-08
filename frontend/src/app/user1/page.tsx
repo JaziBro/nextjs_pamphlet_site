@@ -5,7 +5,7 @@ import Section from "./components/Section";
 import Banner2 from "./components/Banner2";
 import Services from "./components/Services";
 
-export default async function User1Page() {
+export default function User1Page() {
   return (
     <div>
       <Hero/>

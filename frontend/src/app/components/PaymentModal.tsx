@@ -12,10 +12,6 @@ import { createStripe } from "../paymentGateway/stripe"
 import { createTransak } from "../paymentGateway/transak"
 import { getGooglePayConfig, loadGooglePay } from "../paymentGateway/googlepay";
 
-
-
-
-
 declare global {
   interface Window {
     ethereum?: any; // Add this to prevent TypeScript errors

@@ -37,7 +37,7 @@ export default function Navbar() {
             <Link href="/user2" className="text-sm font-medium text-white hover:text-gray-300">
               USER2
             </Link>
-            <Link href="/gift" className="text-sm font-medium text-white hover:text-gray-300">
+            <Link href="/payment" className="text-sm font-medium text-white hover:text-gray-300">
               GIFT MODAL
             </Link>
             <Link href="/app" className="text-sm font-medium text-white hover:text-gray-300">
